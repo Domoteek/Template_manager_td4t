@@ -1,0 +1,9 @@
+qDispFGCol = 0
+qDispBGCol = 2942000000
+
+DISPLAY qDispFGCol, qDispBGCol
+DISPLAY CLS
+DISPLAY 90, 40,"Logo_GM.bmp"
+DISPLAY 55, 100, "0", 0, 8, 8, 2, "Lancement en cours ..."
+
+RUN "Prog_Gestmag.BAS"

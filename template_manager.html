@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Templates d'Images</title>
+    <link rel="stylesheet" href="template_manager.css">
+</head>
+
+<body>
+    <div id="debug-error"
+        style="display:none; color:red; background:white; padding:20px; border:5px solid red; position:fixed; top:0; left:0; width:100%; z-index:9999; font-size:20px; white-space:pre-wrap;">
+    </div>
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            var d = document.getElementById('debug-error');
+            d.style.display = 'block';
+            d.innerHTML += 'Error: ' + msg + '\nLine: ' + line + '\nCol: ' + col + '\n' + (error ? error.stack : '') + '\n\n';
+        };
+    </script>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Gestionnaire de Templates
+                </h1>
+                <p class="subtitle">Ajoutez et gérez vos templates d'images pour Brother</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-manual" onclick="openManual()" title="Ouvrir le manuel d'utilisation">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    📘 Manuel d'utilisation
+                </button>
+                <button class="btn btn-generate" onclick="templateManager.generateManual()" title="Générer le manuel de documentation">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    📄 Générer le manuel
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Section éditeur combiné (Formulaire + Aperçu) -->
+            <div class="editor-container">
+                <section class="editor-form-section">
+                    <div class="section-header">
+                        <h2>Édition du Template</h2>
+                    </div>
+
+                    <form id="templateForm" class="template-form">
+                        <div class="form-grid-compact">
+                            <!-- Ligne 1: Catégorie et Code -->
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="templateCategory">Catégorie *</label>
+                                    <select id="templateCategory" name="templateCategory" required>
+                                        <option value="">Sélectionnez...</option>
+                                        <option value="ABAT">ABAT</option>
+                                        <option value="Amour">Amour</option>
+                                        <option value="BARBECUE">BARBECUE</option>
+                                        <option value="Boucherie">Boucherie</option>
+                                        <option value="Composition">Composition</option>
+                                        <option value="Fêtes">Fêtes</option>
+                                        <option value="Fraîche Découpe">Fraîche Découpe</option>
+                                        <option value="MAREE">MAREE</option>
+                                        <option value="Origine">Origine</option>
+                                        <option value="Pizza">Pizza</option>
+                                        <option value="PREPARATION">PREPARATION</option>
+                                        <option value="Promo">Promo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="templateCode">Code *</label>
+                                    <input type="text" id="templateCode" name="templateCode" placeholder="Auto..."
+                                        readonly required>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 2: Nom -->
+                            <div class="form-row">
+                                <div class="form-group full">
+                                    <label for="templateName">Nom *</label>
+                                    <input type="text" id="templateName" name="templateName"
+                                        placeholder="Ex: Offre -70%" required>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 3: Position X et Y -->
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="positionX">Pos. X</label>
+                                    <input type="number" id="positionX" name="positionX" value="22" min="0">
+                                </div>
+                                <div class="form-group half">
+                                    <label for="positionY">Pos. Y</label>
+                                    <input type="number" id="positionY" name="positionY" value="22" min="0">
+                                </div>
+                            </div>
+
+                            <!-- Ligne 4: Rogner en haut -->
+                            <div class="form-row">
+                                <div class="form-group full">
+                                    <label for="cropTop">Rogner en haut (px)</label>
+                                    <input type="number" id="cropTop" name="cropTop" value="0" min="0" max="500">
+                                    <small class="helper-text">Supprimer X pixels du haut de l'image avant redimensionnement</small>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 5: Description -->
+                            <div class="form-row">
+                                <div class="form-group full">
+                                    <label for="templateDescription">Description</label>
+                                    <textarea id="templateDescription" name="templateDescription" rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 5: Fichier Image -->
+                            <div class="form-row">
+                                <div class="form-group full">
+                                    <label for="imageFile">Image</label>
+                                    <div class="file-upload-wrapper compact">
+                                        <input type="file" id="imageFile" name="imageFile" accept="image/*" required>
+                                        <div class="file-upload-display">
+                                            <span class="upload-text">Choisir une image...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions compact-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelEditBtn"
+                                style="display: none;">Annuler</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">Ajouter</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="editor-preview-section" id="previewSection">
+                    <div class="section-header">
+                        <h2>Aperçu</h2>
+                    </div>
+                    <div class="preview-card">
+                        <div class="preview-image-container">
+                            <img id="previewImage" src="" alt="Aperçu" style="display:none;">
+                            <div class="preview-placeholder">Aucune image</div>
+                        </div>
+                        <div class="preview-details">
+                            <div class="detail-row">
+                                <span id="previewCode" class="preview-code-badge">-</span>
+                                <span id="previewName" class="preview-name-text">Nouveau Template</span>
+                            </div>
+                            <small id="previewPosition">X: 8, Y: 22</small>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- Section liste des templates -->
+            <section class="templates-list-section">
+                <div class="section-header">
+                    <h2>Templates existants</h2>
+                    <div class="filter-controls">
+                        <select id="categoryFilter" class="category-select">
+                            <option value="">Toutes les catégories</option>
+                            <option value="ABAT">ABAT</option>
+                            <option value="Amour">Amour</option>
+                            <option value="BARBECUE">BARBECUE</option>
+                            <option value="Boucherie">Boucherie</option>
+                            <option value="Composition">Composition</option>
+                            <option value="Fêtes">Fêtes</option>
+                            <option value="Fraîche Découpe">Fraîche Découpe</option>
+                            <option value="MAREE">MAREE</option>
+                            <option value="Origine">Origine</option>
+                            <option value="Pizza">Pizza</option>
+                            <option value="PREPARATION">PREPARATION</option>
+                            <option value="Promo">Promo</option>
+                        </select>
+                        <div class="search-box">
+                            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            <input type="text" id="searchInput" placeholder="Rechercher un template...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="templates-grid" id="templatesGrid">
+                    <!-- Les templates seront ajoutés dynamiquement ici -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal de confirmation -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmer la suppression</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer ce template ?</p>
+                <p class="modal-warning">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="template_manager.js"></script>
+</body>
+
+</html>
