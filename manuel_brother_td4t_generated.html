@@ -159,10 +159,16 @@
         }
 
         @media print {
+            @page {
+                margin: 0.5cm;
+                size: A4;
+            }
+
             body {
                 background: white;
-                font-size: 12pt;
-                line-height: 1.4;
+                font-size: 10pt;
+                /* Smaller font */
+                line-height: 1.3;
                 color: black;
                 margin: 0;
                 padding: 0;
@@ -171,21 +177,29 @@
             .container {
                 box-shadow: none;
                 max-width: 100%;
-                padding: 10mm;
+                padding: 0;
                 margin: 0;
+                width: 100%;
             }
 
             header {
-                background: #667eea !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                color: white !important;
-                padding: 15px;
-                margin-bottom: 20px;
-                border-radius: 0;
+                background: none !important;
+                color: black !important;
+                padding: 10px 0;
+                margin-bottom: 15px;
+                border-bottom: 2px solid #667eea;
             }
 
-            h1,
+            header img {
+                max-height: 60px !important;
+            }
+
+            h1 {
+                font-size: 16pt;
+                margin-bottom: 5px;
+                color: #667eea !important;
+            }
+
             h2,
             h3 {
                 color: black !important;
@@ -193,108 +207,110 @@
             }
 
             h2 {
-                border-bottom: 2px solid #667eea;
-                margin-top: 25px;
-                padding-bottom: 5px;
+                font-size: 14pt;
+                border-bottom: 1px solid #667eea;
+                margin-top: 20px;
+                margin-bottom: 10px;
+                padding-bottom: 2px;
+            }
+
+            h3 {
+                font-size: 12pt;
+                margin: 10px 0 5px;
+            }
+
+            .category {
+                background: transparent !important;
+                /* Save ink */
+                padding: 0;
+                margin: 10px 0;
+                border: none;
+                page-break-inside: auto;
+                /* Allow breaking */
             }
 
             .template-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 10px;
-                margin: 15px 0;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                /* More items per row */
+                gap: 8px;
+                /* Tighter gap */
             }
 
             .template-item {
                 page-break-inside: avoid;
-                border: 1px solid #ccc;
-                padding: 8px;
                 break-inside: avoid;
+                border: 1px solid #ddd;
+                padding: 4px;
+                text-align: center;
             }
 
-            .template-item:hover {
-                transform: none;
-                box-shadow: none;
+            .template-code {
+                font-size: 9pt;
+                font-weight: bold;
+                margin-bottom: 2px;
             }
 
             .template-item img {
                 max-width: 100%;
                 height: auto;
-                margin: 5px 0;
+                max-height: 80px;
+                /* Limit height to save space */
+                object-fit: contain;
             }
 
-            table {
-                page-break-inside: avoid;
-                border: 1px solid #ccc;
+            /* Hide non-essential elements if any */
+            .no-print {
+                display: none !important;
             }
+        }
 
-            th,
-            td {
-                padding: 8px;
-                border: 1px solid #ccc;
-            }
+        .info-box,
+        .warning-box,
+        .success-box {
+            page-break-inside: avoid;
+            break-inside: avoid;
+            margin: 10px 0;
+            padding: 10px;
+        }
 
-            th {
-                background: #f0f0f0 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                color: black !important;
-            }
+        footer {
+            page-break-before: always;
+            margin-top: 30px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 0;
+        }
 
-            .category {
-                page-break-inside: avoid;
-                break-inside: avoid;
-                background: #f9f9f9;
-                padding: 15px;
-                margin: 15px 0;
-                border-radius: 5px;
-            }
+        /* Masquer les éléments inutiles à l'impression */
+        .template-item:hover,
+        .contacts .contact-box {
+            background: transparent !important;
+        }
 
-            .info-box,
-            .warning-box,
-            .success-box {
-                page-break-inside: avoid;
-                break-inside: avoid;
-                margin: 10px 0;
-                padding: 10px;
-            }
+        /* Éviter les coupures de page dans les sections importantes */
+        h2,
+        h3,
+        .category h3 {
+            page-break-after: avoid;
+        }
 
-            footer {
-                page-break-before: always;
-                margin-top: 30px;
-                padding: 15px;
-                background: #f0f0f0;
-                border-radius: 0;
-            }
+        .template-item,
+        table,
+        .info-box,
+        .warning-box,
+        .success-box {
+            page-break-inside: avoid;
+        }
 
-            /* Masquer les éléments inutiles à l'impression */
-            .template-item:hover,
-            .contacts .contact-box {
-                background: transparent !important;
-            }
+        /* Ajuster les marges pour l'impression */
+        @page {
+            margin: 15mm;
+        }
 
-            /* Éviter les coupures de page dans les sections importantes */
-            h2,
-            h3,
-            .category h3 {
-                page-break-after: avoid;
-            }
-
-            .template-item,
-            table,
-            .info-box,
-            .warning-box,
-            .success-box {
-                page-break-inside: avoid;
-            }
-
-            /* Ajuster les marges pour l'impression */
-            @page {
-                margin: 15mm;
-            }
-
-            @page :first {
-                margin-top: 10mm;
-            }
+        @page :first {
+            margin-top: 10mm;
+        }
         }
     </style>
 </head>
@@ -763,10 +779,10 @@
         </div>
 
         <div class="category">
-            <h3>💰 PROMO (PR) - 8 modèles</h3>
+            <h3>💰 PROMO (PRO) - 8 modèles</h3>
             <div class="template-grid">
                 <div class="template-item">
-                    <div class="template-code">PR05</div><img src="pr05.bmp" alt="PR05">
+                    <div class="template-code">PRO05</div><img src="pro05.bmp" alt="PRO05">
                 </div>
                 <div class="template-item">
                     <div class="template-code">PRO08</div><img src="pro08.bmp" alt="PRO08">

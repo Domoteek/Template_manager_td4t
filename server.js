@@ -365,6 +365,12 @@ function handleGenerateManual(req, res) {
                         name: categoryName,
                         files: []
                     };
+                } else {
+                    // Si on trouve un préfixe plus long pour la même catégorie, on l'utilise
+                    // Ex: PRO vs PR -> On garde PRO
+                    if (prefix.length > groups[categoryName].prefix.length) {
+                        groups[categoryName].prefix = prefix;
+                    }
                 }
                 groups[categoryName].files.push({
                     file: file,
@@ -482,6 +488,17 @@ function getCategoryIcon(category) {
     };
     return icons[category] || '📦';
 }
+
+server.on('error', (e) => {
+    if (e.code === 'EADDRINUSE') {
+        console.log(`\n⚠️  ATTENTION : Le port ${PORT} est déjà utilisé.`);
+        console.log(`   Cela signifie que le serveur est DÉJÀ LANCÉ en arrière-plan.`);
+        console.log(`   Inutile de le relancer. Vous pouvez accéder à l'application ici : http://localhost:${PORT}/`);
+        process.exit(0);
+    } else {
+        console.error('Erreur serveur:', e);
+    }
+});
 
 server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
