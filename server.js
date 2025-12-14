@@ -17,6 +17,25 @@ const MIME_TYPES = {
     '.svg': 'image/svg+xml'
 };
 
+const CATEGORY_MAPPINGS = {
+    'ABA': 'ABATTAGE',
+    'AMO': 'AMOUR',
+    'BAR': 'BARBECUE',
+    'BOU': 'BOUCHERIE',
+    'COM': 'COMPOSITION',
+    'FET': 'FÊTES',
+    'FRA': 'FRAICHE DECOUPE',
+    'M': 'MAISON',
+    'MAI': 'MAISON',
+    'MAR': 'MAREE',
+    'ORI': 'ORIGINE',
+    'PIZ': 'PIZZA',
+    'PRE': 'PREPARATION',
+    'PR': 'PROMO',
+    'PRO': 'PROMO',
+    'VIA': 'VIA'
+};
+
 const server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -28,7 +47,7 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    const parsedUrl = url.parse(req.url, true);
+    const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
 
     // API Endpoints
     if (parsedUrl.pathname === '/api/save-template' && req.method === 'POST') {
@@ -85,25 +104,8 @@ function handleListTemplates(req, res) {
             const code = path.parse(file).name.toUpperCase();
             // Logique de catégorie partagée
             const prefix = code.replace(/[0-9]/g, '');
-            const prefixes = {
-                'ABA': 'ABATTAGE',
-                'AMO': 'AMOURETTE',
-                'BAR': 'BARBECUE',
-                'BOU': 'BOULANGERIE',
-                'COM': 'COMTÉ',
-                'FET': 'FÊTES',
-                'FRA': 'FRAÎCHEUR',
-                'M': 'MAJORATION',
-                'MAR': 'MARCHÉ',
-                'ORI': 'ORIGINE',
-                'PIZ': 'PIZZA',
-                'PRE': 'PREPARATION',
-                'PR': 'PROMO',
-                'PRO': 'PROMO',
-                'VIA': 'VIA'
-            };
-
-            let category = prefixes[prefix] || prefix;
+            // Utilisation du mapping centralisé
+            let category = CATEGORY_MAPPINGS[prefix] || prefix;
 
             return {
                 code: code,
@@ -201,10 +203,10 @@ EOP`;
     const basBlock = `DOWNLOAD F,"${code}.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
+        SIZE 46 mm, 46 mm
         DIRECTION 1
         CLS
-        PUTBMP ${positionX || 8}, ${positionY || 22}, "${lowerCode}.bmp", 1 
+        PUTBMP ${positionX || 8}, ${positionY || 22}, "${lowerCode}.bmp", 1
         PRINT VAL(qQty$)
     ENDIF
 EOP`;
@@ -337,23 +339,6 @@ function handleGenerateManual(req, res) {
 
             // 2. Grouper les fichiers par préfixe
             const groups = {};
-            const prefixes = {
-                'ABA': 'ABATTAGE',
-                'AMO': 'AMOURETTE',
-                'BAR': 'BARBECUE',
-                'BOU': 'BOULANGERIE',
-                'COM': 'COMTÉ',
-                'FET': 'FÊTES',
-                'FRA': 'FRAÎCHEUR',
-                'M': 'MAJORATION', // M01, M02...
-                'MAR': 'MARCHÉ',   // MAR01... (Attention au conflit potentiel si simple startsWith, mais ici M vs MAR ça va)
-                'ORI': 'ORIGINE',
-                'PIZ': 'PIZZA',
-                'PRE': 'PREPARATION',
-                'PR': 'PROMO',     // PR05 vs PRO
-                'PRO': 'PROMO',
-                'VIA': 'VIA'
-            };
 
             bmpFiles.forEach(file => {
                 const upperFile = file.toUpperCase();
@@ -369,11 +354,10 @@ function handleGenerateManual(req, res) {
                 }
 
                 // Normalisation pour le groupement
-                let groupKey = prefix;
-                let categoryName = prefixes[prefix] || prefix;
-
                 // Spécial pour PRO et PR qui vont sans doute ensemble dans Promo ?
                 // Dans le mapping ci-dessus PR -> PROMO et PRO -> PROMO, donc on peut grouper par CategoryName
+
+                let categoryName = CATEGORY_MAPPINGS[prefix] || prefix;
 
                 if (!groups[categoryName]) {
                     groups[categoryName] = {
@@ -481,19 +465,20 @@ function handleGenerateManual(req, res) {
 function getCategoryIcon(category) {
     const icons = {
         'ABATTAGE': '🏪',
-        'AMOURETTE': '🥪',
+        'AMOUR': '❤️',
         'BARBECUE': '🍺',
-        'BOULANGERIE': '🥖',
-        'COMTÉ': '🧀',
+        'BOUCHERIE': '🥩',
+        'COMPOSITION': '📋',
         'FÊTES': '🎄',
-        'FRAÎCHEUR': '🍓',
-        'MAJORATION': '🔢',
+        'FRAICHE DECOUPE': '🔪',
+        'MAISON': '🏠',
         'MARCHÉ': '🏷️',
         'MAREE': '🐟',
         'ORIGINE': '🌟',
         'PIZZA': '🍕',
         'PREPARATION': '👨‍🍳',
-        'PROMO': '💰'
+        'PROMO': '💰',
+        'VIA': '🚚'
     };
     return icons[category] || '📦';
 }

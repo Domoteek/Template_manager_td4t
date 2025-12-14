@@ -37,6 +37,8 @@ class TemplateManager {
                 });
 
                 this.renderTemplates();
+                this.populateCategoryFilter(); // Mettre à jour le filtre
+                this.populateFormCategoryDropdown(); // Mettre à jour le formulaire
                 this.updatePreview();
                 this.showToast('Liste des templates mise à jour', 'success');
             } else {
@@ -477,6 +479,57 @@ class TemplateManager {
         document.getElementById('previewPosition').textContent = `X: ${posX}, Y: ${posY}`;
     }
 
+    populateCategoryFilter() {
+        const filterSelect = document.getElementById('categoryFilter');
+        if (!filterSelect) return;
+
+        // Sauvegarder la sélection actuelle si pertinente
+        const currentSelection = filterSelect.value;
+
+        // Extraire les catégories uniques
+        const categories = [...new Set(this.templates.map(t => t.category).filter(Boolean))].sort();
+
+        // Vider et recréer les options
+        filterSelect.innerHTML = '<option value="">Toutes les catégories</option>';
+
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            filterSelect.appendChild(option);
+        });
+
+        // Tenter de restaurer la sélection
+        if (categories.includes(currentSelection)) {
+            filterSelect.value = currentSelection;
+        }
+    }
+
+    populateFormCategoryDropdown() {
+        const formSelect = document.getElementById('templateCategory');
+        if (!formSelect) return;
+
+        // Sauvegarder la sélection actuelle
+        const currentSelection = formSelect.value;
+
+        // Extraire les catégories uniques
+        const categories = [...new Set(this.templates.map(t => t.category).filter(Boolean))].sort();
+
+        // Vider (garder le placeholder)
+        formSelect.innerHTML = '<option value="">Sélectionnez...</option>';
+
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            formSelect.appendChild(option);
+        });
+
+        if (currentSelection && categories.includes(currentSelection)) {
+            formSelect.value = currentSelection;
+        }
+    }
+
     renderTemplates(filter = '', category = '') {
         const grid = document.getElementById('templatesGrid');
         let filteredTemplates = this.templates;
@@ -578,8 +631,9 @@ class TemplateManager {
         }
 
         // Map categories to their code prefixes (optional overrides)
+        // Map categories to their code prefixes (optional overrides)
         const categoryPrefixes = {
-            // Add specific overrides here if needed
+            'MAREE': 'MAR' // Just in case
         };
 
         let prefix = categoryPrefixes[category];
@@ -591,7 +645,7 @@ class TemplateManager {
                 .toUpperCase();
         }
 
-        if (!prefix || prefix.length < 3) {
+        if (!prefix) {
             console.warn('Could not generate prefix for:', category);
             return;
         }

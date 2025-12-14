@@ -2069,68 +2069,68 @@ EOP
 DOWNLOAD F,"PRO14.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"M01.BAS"
+DOWNLOAD F,"MAI01.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
         REM Configuration pour 203 DPI - Format 46x46mm
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "m01.bmp", 1 
+        PUTBMP 8, 22, "mai01.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
 	ENDIF
 EOP
-DOWNLOAD F,"M01.INI"
+DOWNLOAD F,"MAI01.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"M02.BAS"
+DOWNLOAD F,"MAI02.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
         REM Configuration pour 203 DPI - Format 46x46mm
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "m02.bmp", 1 
+        PUTBMP 8, 22, "mai02.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
 	ENDIF
 EOP
-DOWNLOAD F,"M02.INI"
+DOWNLOAD F,"MAI02.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"M03.BAS"
+DOWNLOAD F,"MAI03.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
         REM Configuration pour 203 DPI - Format 46x46mm
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "m03.bmp", 1 
+        PUTBMP 8, 22, "mai03.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
 	ENDIF
 EOP
-DOWNLOAD F,"M03.INI"
+DOWNLOAD F,"MAI03.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"M04.BAS"
+DOWNLOAD F,"MAI04.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
         REM Configuration pour 203 DPI - Format 46x46mm
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "m04.bmp", 1 
+        PUTBMP 8, 22, "mai04.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
 	ENDIF
 EOP
-DOWNLOAD F,"M04.INI"
+DOWNLOAD F,"MAI04.INI"
 REM - Init file for Template
 EOP
 DOWNLOAD F,"BOU01.BAS"
@@ -3275,5 +3275,4 @@ EOP
 DOWNLOAD F,"ABA01.INI"
 REM - Init file for Template
 EOP
-
 RUN "GESTMAG.BAS"
