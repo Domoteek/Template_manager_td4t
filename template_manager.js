@@ -1418,3 +1418,44 @@ function closeModal() {
 function openManual() {
     window.open('manuel_brother_td4t_generated.html', '_blank');
 }
+
+// --- Fonctions Clé USB ---
+function promptUsbKey() {
+    const driveLetter = prompt("Veuillez entrer la lettre de votre clé USB (ex: E, F, G...) :");
+    if (driveLetter) {
+        prepareUsbKey(driveLetter);
+    }
+}
+
+async function prepareUsbKey(driveLetter) {
+    // Petit nettoyage client
+    const letter = driveLetter.toUpperCase().replace(/[^A-Z]/g, '');
+    if (!letter) {
+        if (templateManager) templateManager.showToast('Lettre de lecteur invalide.', 'error');
+        return;
+    }
+
+    if (templateManager) templateManager.showToast('Préparation de la clé en cours...', 'info');
+
+    try {
+        const response = await fetch('http://localhost:3000/prepare-usb', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ driveLetter: letter })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            if (templateManager) templateManager.showToast(result.message, 'success');
+        } else {
+            if (templateManager) templateManager.showToast('Erreur : ' + result.error, 'error');
+        }
+
+    } catch (error) {
+        console.error('Erreur USB:', error);
+        if (templateManager) templateManager.showToast('Erreur de communication avec le serveur.', 'error');
+    }
+}

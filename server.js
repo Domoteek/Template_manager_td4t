@@ -65,6 +65,11 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    if (parsedUrl.pathname === '/prepare-usb' && req.method === 'POST') {
+        handlePrepareUsb(req, res);
+        return;
+    }
+
     if (parsedUrl.pathname === '/api/generate-manual' && req.method === 'POST') {
         handleGenerateManual(req, res);
         return;
@@ -464,6 +469,96 @@ function handleGenerateManual(req, res) {
             console.error('Erreur lors de la génération du manuel:', e);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: "Erreur lors de la génération du manuel" }));
+        }
+    });
+}
+
+function handlePrepareUsb(req, res) {
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+
+    req.on('end', () => {
+        try {
+            const data = JSON.parse(body);
+            let { driveLetter } = data;
+
+            if (!driveLetter) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: "Lettre de lecteur manquante" }));
+                return;
+            }
+
+            // Nettoyage de la lettre (ex: "e" -> "E:")
+            driveLetter = driveLetter.toUpperCase().replace(/[^A-Z]/g, '');
+            if (driveLetter.length !== 1) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: "Lettre de lecteur invalide (A-Z)" }));
+                return;
+            }
+
+            const destRoot = `${driveLetter}:/`;
+
+            // Vérifier si le lecteur est accessible (écriture test)
+            try {
+                fs.accessSync(destRoot, fs.constants.W_OK);
+            } catch (err) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: `Le lecteur ${destRoot} n'est pas accessible ou inscriptible.` }));
+                return;
+            }
+
+            // Liste des fichiers à copier
+            const allFiles = fs.readdirSync(WORK_DIR);
+
+            // 1. BMP Templates (Exclure Logo et USB)
+            const bmpFiles = allFiles.filter(file =>
+                file.toLowerCase().endsWith('.bmp') &&
+                !file.startsWith('Logo_GM') &&
+                !file.toUpperCase().startsWith('USB')
+            );
+
+            // 2. Fichiers Systèmes
+            const sysFiles = ['AUTO.BAS', 'Prog_Gestmag.BAS', 'AUTO.TXT'];
+
+            let copiedCount = 0;
+            let errors = [];
+
+            // Copie BMPs
+            bmpFiles.forEach(file => {
+                try {
+                    fs.copyFileSync(path.join(WORK_DIR, file), path.join(destRoot, file));
+                    copiedCount++;
+                } catch (e) {
+                    errors.push(`Erreur copie ${file}: ${e.message}`);
+                }
+            });
+
+            // Copie SysFiles
+            sysFiles.forEach(file => {
+                const srcPath = path.join(WORK_DIR, file);
+                if (fs.existsSync(srcPath)) {
+                    try {
+                        fs.copyFileSync(srcPath, path.join(destRoot, file));
+                        copiedCount++;
+                    } catch (e) {
+                        errors.push(`Erreur copie ${file}: ${e.message}`);
+                    }
+                }
+            });
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({
+                success: true,
+                message: `Clé USB préparée avec succès ! (${copiedCount} fichiers copiés)`,
+                details: errors.length > 0 ? errors : null
+            }));
+
+        } catch (e) {
+            console.error('Erreur USB:', e);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: "Erreur serveur lors de la préparation USB" }));
         }
     });
 }
