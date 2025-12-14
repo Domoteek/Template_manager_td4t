@@ -3275,19 +3275,5 @@ EOP
 DOWNLOAD F,"ABA01.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"ABA04.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "aba04.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"ABA04.INI"
-REM - CROPTOP = 0
-EOP
-
 
 RUN "GESTMAG.BAS"

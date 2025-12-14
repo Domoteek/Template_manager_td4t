@@ -74,8 +74,54 @@ const server = http.createServer((req, res) => {
 });
 
 function handleListTemplates(req, res) {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: "Ready" }));
+    try {
+        const allFiles = fs.readdirSync(WORK_DIR);
+        const bmpFiles = allFiles
+            .filter(file => file.toLowerCase().endsWith('.bmp'))
+            // Exclusions système ET 'USB'
+            .filter(file => !file.startsWith('Logo_GM') && !file.startsWith('.') && !file.toUpperCase().startsWith('USB'));
+
+        const templates = bmpFiles.map(file => {
+            const code = path.parse(file).name.toUpperCase();
+            // Logique de catégorie partagée
+            const prefix = code.replace(/[0-9]/g, '');
+            const prefixes = {
+                'ABA': 'ABATTAGE',
+                'AMO': 'AMOURETTE',
+                'BAR': 'BARBECUE',
+                'BOU': 'BOULANGERIE',
+                'COM': 'COMTÉ',
+                'FET': 'FÊTES',
+                'FRA': 'FRAÎCHEUR',
+                'M': 'MAJORATION',
+                'MAR': 'MARCHÉ',
+                'ORI': 'ORIGINE',
+                'PIZ': 'PIZZA',
+                'PRE': 'PREPARATION',
+                'PR': 'PROMO',
+                'PRO': 'PROMO',
+                'VIA': 'VIA'
+            };
+
+            let category = prefixes[prefix] || prefix;
+
+            return {
+                code: code,
+                // Nom par défaut, le frontend pourra enrichir
+                name: `${category} ${code.replace(prefix, '')}`,
+                category: category,
+                imageData: file, // Chemin relatif
+                isExisting: true
+            };
+        });
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(templates));
+    } catch (e) {
+        console.error(e);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: "Erreur lors du scan des templates" }));
+    }
 }
 
 function handleSaveTemplate(req, res) {
@@ -275,10 +321,12 @@ function handleGenerateManual(req, res) {
 
     req.on('end', () => {
         try {
-            // Scanner les fichiers BMP dans le répertoire
-            const bmpFiles = fs.readdirSync(WORK_DIR)
+            // 1. Scanner les fichiers BMP dans le répertoire
+            const allFiles = fs.readdirSync(WORK_DIR);
+            const bmpFiles = allFiles
                 .filter(file => file.toLowerCase().endsWith('.bmp'))
-                .filter(file => /^(aba|amo|bar|bou|com|fet|fra|m|mar|ori|piz|pre|pro)\d+/i.test(file));
+                // Exclure les fichiers système, temporaires ET 'USB'
+                .filter(file => !file.startsWith('Logo_GM') && !file.startsWith('.') && !file.toUpperCase().startsWith('USB'));
 
             const totalTemplates = bmpFiles.length;
             const currentDate = new Date().toLocaleDateString('fr-FR', {
@@ -287,7 +335,62 @@ function handleGenerateManual(req, res) {
                 year: 'numeric'
             });
 
-            // Lire le template de manuel existant
+            // 2. Grouper les fichiers par préfixe
+            const groups = {};
+            const prefixes = {
+                'ABA': 'ABATTAGE',
+                'AMO': 'AMOURETTE',
+                'BAR': 'BARBECUE',
+                'BOU': 'BOULANGERIE',
+                'COM': 'COMTÉ',
+                'FET': 'FÊTES',
+                'FRA': 'FRAÎCHEUR',
+                'M': 'MAJORATION', // M01, M02...
+                'MAR': 'MARCHÉ',   // MAR01... (Attention au conflit potentiel si simple startsWith, mais ici M vs MAR ça va)
+                'ORI': 'ORIGINE',
+                'PIZ': 'PIZZA',
+                'PRE': 'PREPARATION',
+                'PR': 'PROMO',     // PR05 vs PRO
+                'PRO': 'PROMO',
+                'VIA': 'VIA'
+            };
+
+            bmpFiles.forEach(file => {
+                const upperFile = file.toUpperCase();
+                // Extraire le code (nom sans extension)
+                const code = path.parse(file).name.toUpperCase();
+
+                // Trouver le préfixe
+                let prefix = code.replace(/[0-9]/g, ''); // Enlever les chiffres
+
+                // Cas particuliers ou nettoyage
+                if (prefix === 'M' || prefix === 'MAR') {
+                    // Laisser tel quel, le mapping gérera
+                }
+
+                // Normalisation pour le groupement
+                let groupKey = prefix;
+                let categoryName = prefixes[prefix] || prefix;
+
+                // Spécial pour PRO et PR qui vont sans doute ensemble dans Promo ?
+                // Dans le mapping ci-dessus PR -> PROMO et PRO -> PROMO, donc on peut grouper par CategoryName
+
+                if (!groups[categoryName]) {
+                    groups[categoryName] = {
+                        prefix: prefix,
+                        name: categoryName,
+                        files: []
+                    };
+                }
+                groups[categoryName].files.push({
+                    file: file,
+                    code: code,
+                    // Essayer de parser le numéro pour le tri
+                    number: parseInt(code.match(/\d+/)?.[0] || 0)
+                });
+            });
+
+            // 3. Lire le template de manuel existant pour récupérer l'en-tête
             const manualTemplatePath = path.join(WORK_DIR, 'manuel_brother_td4t.html');
             if (!fs.existsSync(manualTemplatePath)) {
                 res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -295,79 +398,73 @@ function handleGenerateManual(req, res) {
                 return;
             }
 
-            let htmlContent = fs.readFileSync(manualTemplatePath, 'utf8');
+            let originalContent = fs.readFileSync(manualTemplatePath, 'utf8');
 
-            // Mettre à jour le compteur de templates et la date
-            htmlContent = htmlContent.replace(/98 mod.?les disponibles/g, `${totalTemplates} modèles disponibles`);
-            htmlContent = htmlContent.replace(/\d{2,} [a-zA-Z]+ \d{4}/g, currentDate);
-            
-            // Mettre à jour le footer
-            htmlContent = htmlContent.replace(/Version 2\.0 • \d{2} [a-zA-Z]+ \d{4} • \d+ Templates disponibles/g, 
-                `Version 2.0 • ${currentDate} • ${totalTemplates} Templates disponibles`);
+            // On veut conserver tout ce qui est avant le catalogue
+            // Marqueur : <h2>📊 Catalogue des Templates
+            const marker = '<h2>📊 Catalogue des Templates';
+            const splitIndex = originalContent.indexOf(marker);
 
-            // Remplacer les chemins absolus des images par des chemins relatifs
-            const basePath = 'c:/_DONNEES/_travail client/Travail BRother etiquettes/Brother/Definitif BMP 46x46 FR/';
-            const escapedPath = basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
-            const pathRegex = new RegExp(escapedPath, 'gi');
-            htmlContent = htmlContent.replace(pathRegex, '/');
-
-            // Vérifier si ABA04 existe et l'ajouter s'il manque
-            if (bmpFiles.includes('aba04.bmp') && !htmlContent.includes('ABA04')) {
-                // Trouver la section ABAT
-                const abatSectionStart = htmlContent.indexOf('<div class="category">');
-                let abatSectionEnd = htmlContent.indexOf('</div>\n</div>', abatSectionStart);
-                
-                // Chercher la fin de la section ABAT (après le template-grid)
-                let tempIndex = abatSectionStart;
-                let depth = 0;
-                while (tempIndex < htmlContent.length) {
-                    if (htmlContent.substr(tempIndex, 6) === '<div c') {
-                        depth++;
-                    } else if (htmlContent.substr(tempIndex, 6) === '</div>') {
-                        depth--;
-                        if (depth === 0) {
-                            abatSectionEnd = tempIndex + 6;
-                            break;
-                        }
-                    }
-                    tempIndex++;
-                }
-                
-                if (abatSectionStart !== -1 && abatSectionEnd !== -1) {
-                    const abatSection = htmlContent.substring(abatSectionStart, abatSectionEnd);
-                    
-                    // Mettre à jour le compteur de modèles dans la section ABAT (3 -> 4)
-                    const updatedAbatSection = abatSection.replace(
-                        /ABATTAGE \(ABA\) - 3 modèles/,
-                        'ABATTAGE (ABA) - 4 modèles'
-                    );
-                    
-                    // Ajouter ABA04 avant la fermeture du template-grid
-                    const templateGridEnd = updatedAbatSection.indexOf('</div>\n</div>');
-                    if (templateGridEnd !== -1) {
-                        const beforeGridEnd = updatedAbatSection.substring(0, templateGridEnd);
-                        const afterGridEnd = updatedAbatSection.substring(templateGridEnd);
-                        
-                        const newTemplateItem = `                <div class="template-item">
-                    <div class="template-code">ABA04</div><img
-                        src="/aba04.bmp"
-                        alt="ABA04">
-                </div>
-`;
-                        
-                        const finalAbatSection = beforeGridEnd + newTemplateItem + afterGridEnd;
-                        htmlContent = htmlContent.substring(0, abatSectionStart) + finalAbatSection + htmlContent.substring(abatSectionEnd);
-                    }
-                }
+            let headerContent = '';
+            if (splitIndex !== -1) {
+                headerContent = originalContent.substring(0, splitIndex);
+            } else {
+                // Fallback si on ne trouve pas le marqueur (peu probable)
+                headerContent = originalContent;
             }
+
+            // Mettre à jour les stats dans le header si présent (au cas où on regénère sur un généré)
+            // Mais ici on prend le fichier source HTML, donc on peut juste reconstruire la ligne de titre
+
+            // 4. Construire le contenu HTML
+            let newContent = headerContent;
+
+            // Ajouter le titre du catalogue mis à jour
+            newContent += `<h2>📊 Catalogue des Templates (${totalTemplates} modèles disponibles)</h2>\n\n`;
+
+            // Trier les catégories par nom
+            const sortedCategories = Object.keys(groups).sort();
+
+            sortedCategories.forEach(catName => {
+                const group = groups[catName];
+                // Trier les fichiers par numéro
+                group.files.sort((a, b) => a.number - b.number);
+
+                newContent += `        <div class="category">\n`;
+                newContent += `            <h3>${getCategoryIcon(catName)} ${catName} (${group.prefix}) - ${group.files.length} modèles</h3>\n`;
+                newContent += `            <div class="template-grid">\n`;
+
+                group.files.forEach(item => {
+                    newContent += `                <div class="template-item">\n`;
+                    newContent += `                    <div class="template-code">${item.code}</div>`;
+                    // Image chemin relatif
+                    newContent += `<img src="${item.file}" alt="${item.code}">`;
+                    newContent += `\n                </div>\n`;
+                });
+
+                newContent += `            </div>\n`;
+                newContent += `        </div>\n\n`;
+            });
+
+            // Ajouter le footer
+            newContent += `        <footer>
+            <div class="info-box" style="text-align: center; margin-top: 40px; color: #666;">
+                <p>Document généré automatiquement le ${currentDate}</p>
+                <p>Système de gestion de templates Brother TD-4T - Version 2.0</p>
+                <p>${totalTemplates} modèles indexés (Images système exclues)</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>`;
 
             // Sauvegarder le manuel généré
             const outputPath = path.join(WORK_DIR, 'manuel_brother_td4t_generated.html');
-            fs.writeFileSync(outputPath, htmlContent, 'utf8');
+            fs.writeFileSync(outputPath, newContent, 'utf8');
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ 
-                success: true, 
+            res.end(JSON.stringify({
+                success: true,
                 message: `Manuel généré avec succès : ${totalTemplates} templates`,
                 filePath: 'manuel_brother_td4t_generated.html',
                 totalTemplates: totalTemplates
@@ -379,6 +476,26 @@ function handleGenerateManual(req, res) {
             res.end(JSON.stringify({ error: "Erreur lors de la génération du manuel" }));
         }
     });
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        'ABATTAGE': '🏪',
+        'AMOURETTE': '🥪',
+        'BARBECUE': '🍺',
+        'BOULANGERIE': '🥖',
+        'COMTÉ': '🧀',
+        'FÊTES': '🎄',
+        'FRAÎCHEUR': '🍓',
+        'MAJORATION': '🔢',
+        'MARCHÉ': '🏷️',
+        'MAREE': '🐟',
+        'ORIGINE': '🌟',
+        'PIZZA': '🍕',
+        'PREPARATION': '👨‍🍳',
+        'PROMO': '💰'
+    };
+    return icons[category] || '📦';
 }
 
 server.listen(PORT, () => {

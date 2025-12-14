@@ -188,7 +188,6 @@ DISPLAY CLS
 	COPY E,"amo05.bmp" ,F,"amo05.bmp"
 	COPY E,"amo06.bmp" ,F,"amo06.bmp"
 	COPY E,"bou08.bmp" ,F,"bou08.bmp"
-	COPY E,"aba04.bmp" ,F,"aba04.bmp"
 
 
 

@@ -8,8 +8,94 @@ class TemplateManager {
 
     init() {
         this.setupEventListeners();
-        this.renderTemplates();
-        this.updatePreview(); // Sync preview with default input values
+        // Charger depuis le serveur au lieu du localStorage direct
+        this.fetchTemplatesFromServer();
+    }
+
+    async fetchTemplatesFromServer() {
+        try {
+            const response = await fetch('/api/list-templates');
+            if (response.ok) {
+                const serverTemplates = await response.json();
+
+                // Fusionner avec les métadonnées locales (description, positions) si existantes
+                const localData = this.loadLocalMetadata();
+
+                this.templates = serverTemplates.map(t => {
+                    const local = localData[t.code] || {};
+                    return {
+                        id: Date.now() + Math.random(), // ID front temporaire
+                        ...t,
+                        category: t.category || local.category,
+                        description: local.description || `Template ${t.category}`, // Description par défaut si vide
+                        positionX: local.positionX || 22,
+                        positionY: local.positionY || 22,
+                        cropTop: local.cropTop || 0,
+                        // Conserver les dates si dispos
+                        createdAt: local.createdAt || new Date().toISOString()
+                    };
+                });
+
+                this.renderTemplates();
+                this.updatePreview();
+                this.showToast('Liste des templates mise à jour', 'success');
+            } else {
+                console.error('Erreur chargement templates:', await response.text());
+                this.loadFallbackTemplates();
+            }
+        } catch (e) {
+            console.error('Erreur connexion serveur:', e);
+            this.showToast('Mode hors ligne : chargement local', 'warning');
+            this.loadFallbackTemplates();
+        }
+    }
+
+    loadLocalMetadata() {
+        const stored = localStorage.getItem('brotherTemplatesMetadata');
+        return stored ? JSON.parse(stored) : {};
+    }
+
+    saveLocalMetadata() {
+        // Sauvegarder uniquement les métadonnées utiles indexées par Code
+        const metadata = {};
+        this.templates.forEach(t => {
+            metadata[t.code] = {
+                description: t.description,
+                positionX: t.positionX,
+                positionY: t.positionY,
+                cropTop: t.cropTop,
+                category: t.category,
+                createdAt: t.createdAt
+            };
+        });
+        localStorage.setItem('brotherTemplatesMetadata', JSON.stringify(metadata));
+    }
+
+    // Ancien loadTemplates (renommé/supprimé dans la pratique, remplacé par fetchTemplatesFromServer)
+    loadFallbackTemplates() {
+        const stored = localStorage.getItem('brotherTemplates');
+        if (stored) {
+            try {
+                this.templates = JSON.parse(stored);
+                this.renderTemplates();
+            } catch (e) {
+                this.templates = this.getDefaultTemplates();
+                this.renderTemplates();
+            }
+        } else {
+            this.templates = this.getDefaultTemplates();
+            this.renderTemplates();
+        }
+    }
+
+    // Mise à jour de saveTemplates pour utiliser saveLocalMetadata
+    saveTemplates() {
+        // On ne sauvegarde plus toute la liste dans localStorage comme source de vérité
+        // mais on sauvegarde les métadonnées pour les réappliquer au prochain fetch
+        this.saveLocalMetadata();
+
+        // Optionnel : garder brotherTemplates pour le fallback hors ligne
+        localStorage.setItem('brotherTemplates', JSON.stringify(this.templates));
     }
 
     setupEventListeners() {
@@ -161,7 +247,7 @@ class TemplateManager {
                 }
 
                 this.saveTemplates();
-                
+
                 // Get current filter values before rendering (capture at response time)
                 const searchQuery = document.getElementById('searchInput').value;
                 const category = document.getElementById('categoryFilter').value;
@@ -303,7 +389,7 @@ class TemplateManager {
                 // Get cropTop value from form
                 const cropTopInput = document.getElementById('cropTop');
                 const cropTop = cropTopInput ? parseInt(cropTopInput.value) || 0 : 0;
-                
+
                 // Validate cropTop value
                 if (cropTop < 0 || cropTop >= img.height) {
                     this.showToast('Valeur de rognage invalide', 'error');
@@ -1125,7 +1211,7 @@ END SUB
         const y = 0; // Align to top
 
         // Draw the resized image with cropping from top
-        ctx.drawImage(img, 
+        ctx.drawImage(img,
             0, cropTop, img.width, img.height - cropTop, // Source: crop from top
             x, y, scaledWidth, scaledHeight              // Destination: scaled
         );
@@ -1227,7 +1313,7 @@ END SUB
 
             if (response.ok) {
                 this.showToast(`Manuel généré avec succès : ${result.totalTemplates} templates`, 'success');
-                
+
                 // Ouvrir le manuel généré dans un nouvel onglet
                 setTimeout(() => {
                     window.open('manuel_brother_td4t_generated.html', '_blank');
