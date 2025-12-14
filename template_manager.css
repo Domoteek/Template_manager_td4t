@@ -86,6 +86,29 @@ body::before {
     z-index: 1;
 }
 
+
+.logo-gm {
+    height: 60px;
+    margin-right: 1.5rem;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    /* Space between logo and text */
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Align text to the left */
+    text-align: left;
+}
+
 /* Header */
 .header {
     margin-bottom: 1.5rem;
@@ -105,9 +128,7 @@ body::before {
     }
 }
 
-.header-content {
-    text-align: center;
-}
+/* Removed duplicate .header-content block */
 
 .title {
     font-size: 1.8rem;

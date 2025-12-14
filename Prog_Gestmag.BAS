@@ -2963,19 +2963,6 @@ EOP
 DOWNLOAD F,"PIZ03.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"PIZ04.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 8, 22, "piz04.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"PIZ04.INI"
-REM - Init file for Template
-EOP 
 DOWNLOAD F,"PIZ05.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -3274,6 +3261,19 @@ DOWNLOAD F,"ABA01.BAS"
 EOP
 DOWNLOAD F,"ABA01.INI"
 REM - Init file for Template
+EOP
+DOWNLOAD F,"PIZ04.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "piz04.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"PIZ04.INI"
+REM - CROPTOP = 0
 EOP
 
 RUN "GESTMAG.BAS"

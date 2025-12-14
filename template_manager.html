@@ -22,15 +22,18 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                        <polyline points="21 15 16 10 5 21"></polyline>
-                    </svg>
-                    Gestionnaire de Templates
-                </h1>
-                <p class="subtitle">Ajoutez et gérez vos templates d'images pour Brother</p>
+                <img src="Logo_GM.bmp" alt="Logo GM" class="logo-gm">
+                <div class="header-text">
+                    <h1 class="title">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        Gestionnaire de Templates
+                    </h1>
+                    <p class="subtitle">Ajoutez et gérez vos templates d'images pour Brother</p>
+                </div>
             </div>
             <div class="header-actions">
                 <button class="btn btn-manual" onclick="openManual()" title="Ouvrir le manuel d'utilisation">
@@ -40,7 +43,8 @@
                     </svg>
                     📘 Manuel d'utilisation
                 </button>
-                <button class="btn btn-generate" onclick="templateManager.generateManual()" title="Générer le manuel de documentation">
+                <button class="btn btn-generate" onclick="templateManager.generateManual()"
+                    title="Générer le manuel de documentation">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
@@ -116,7 +120,8 @@
                                 <div class="form-group full">
                                     <label for="cropTop">Rogner en haut (px)</label>
                                     <input type="number" id="cropTop" name="cropTop" value="0" min="0" max="500">
-                                    <small class="helper-text">Supprimer X pixels du haut de l'image avant redimensionnement</small>
+                                    <small class="helper-text">Supprimer X pixels du haut de l'image avant
+                                        redimensionnement</small>
                                 </div>
                             </div>
 
