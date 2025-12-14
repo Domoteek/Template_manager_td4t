@@ -3275,4 +3275,5 @@ EOP
 DOWNLOAD F,"ABA01.INI"
 REM - Init file for Template
 EOP
+
 RUN "GESTMAG.BAS"

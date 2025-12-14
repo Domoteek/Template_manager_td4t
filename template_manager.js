@@ -263,11 +263,14 @@ class TemplateManager {
         });
     }
 
-    editTemplate(id) {
-        const template = this.templates.find(t => t.id === id);
+    editTemplate(code) {
+        let template = this.templates.find(t => t.id === code);
+        if (!template) {
+            template = this.templates.find(t => t.code === code);
+        }
         if (!template) return;
 
-        this.editingTemplateId = id;
+        this.editingTemplateId = template.id;
 
         // Populate fields
         const codeInput = document.getElementById('templateCode');
@@ -572,6 +575,26 @@ class TemplateManager {
             <div class="template-card" data-id="${template.id}">
                 <div class="template-card-image">
                     <img src="${imageSrc}" alt="${template.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3E${template.code}%3C/text%3E%3C/svg%3E'">
+                    <div class="template-card-actions overlay">
+                        <button class="icon-btn" onclick="templateManager.editTemplate('${template.code}')" title="Modifier">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button class="icon-btn" onclick="templateManager.viewTemplate('${template.code}')" title="Voir l'image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                        <button class="icon-btn delete" onclick="templateManager.deleteTemplate('${template.code}')" title="Supprimer">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="template-card-content">
                     <div class="template-card-header">
@@ -579,26 +602,7 @@ class TemplateManager {
                             <span class="template-code">${template.code}</span>
                             ${categoryBadge}
                         </div>
-                        <div class="template-card-actions">
-                            <button class="icon-btn" onclick="templateManager.editTemplate(${template.id})" title="Modifier">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </button>
-                            <button class="icon-btn" onclick="templateManager.viewTemplate(${template.id})" title="Voir l'image">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                            </button>
-                            <button class="icon-btn delete" onclick="templateManager.deleteTemplate(${template.id})" title="Supprimer">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                            </button>
-                        </div>
+
                     </div>
                     <h3 class="template-name">${template.name}</h3>
                     ${template.description ? `<p class="template-description">${template.description}</p>` : ''}
@@ -693,8 +697,11 @@ class TemplateManager {
         this.updatePreview();
     }
 
-    viewTemplate(id) {
-        const template = this.templates.find(t => t.id === id);
+    viewTemplate(code) {
+        let template = this.templates.find(t => t.id === code);
+        if (!template) {
+            template = this.templates.find(t => t.code === code);
+        }
         if (!template) return;
 
         // Ouvrir l'image dans une nouvelle fenêtre
@@ -753,8 +760,11 @@ class TemplateManager {
     }
 
 
-    deleteTemplate(id) {
-        const template = this.templates.find(t => t.id === id);
+    deleteTemplate(code) {
+        let template = this.templates.find(t => t.id === code);
+        if (!template) {
+            template = this.templates.find(t => t.code === code);
+        }
         if (!template) return;
 
         const modal = document.getElementById('confirmModal');
@@ -762,7 +772,11 @@ class TemplateManager {
 
         modal.classList.add('active');
 
-        confirmBtn.onclick = async () => {
+        // Remove old listeners to avoid stacking
+        const newBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+
+        newBtn.onclick = async () => {
             this.showToast('Suppression complète en cours...', 'warning');
 
             try {
@@ -773,7 +787,7 @@ class TemplateManager {
                 });
 
                 if (response.ok) {
-                    this.templates = this.templates.filter(t => t.id !== id);
+                    this.templates = this.templates.filter(t => t.id !== template.id); // Use template.id which is guaranteed from the find result
                     this.saveTemplates();
                     // Get current filter values before rendering
                     const searchQuery = document.getElementById('searchInput').value;
@@ -786,18 +800,23 @@ class TemplateManager {
                 }
             } catch (e) {
                 console.error(e);
-                this.showToast('Erreur de connexion au serveur', 'error');
+                this.showToast('Erreur serveur', 'error');
             }
         };
     }
+
+
 
     closeModal() {
         const modal = document.getElementById('confirmModal');
         modal.classList.remove('active');
     }
 
-    downloadTemplate(id) {
-        const template = this.templates.find(t => t.id === id);
+    async downloadTemplate(code) {
+        let template = this.templates.find(t => t.id === code);
+        if (!template) {
+            template = this.templates.find(t => t.code === code);
+        }
         if (!template) return;
 
         // Download image
