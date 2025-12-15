@@ -237,6 +237,21 @@ section:nth-child(3) {
     color: var(--text-primary);
 }
 
+.template-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.75rem;
+    margin-top: auto;
+    flex-wrap: wrap;
+    /* Allow wrapping */
+    gap: 0.5rem;
+    /* Add gap for wrapped items */
+}
+
 /* Editor Layout */
 .editor-container {
     display: grid;

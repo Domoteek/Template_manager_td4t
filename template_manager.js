@@ -620,6 +620,7 @@ class TemplateManager {
                     ${template.description ? `<p class="template-description">${template.description}</p>` : ''}
                     <div class="template-meta">
                         <span>Position: ${template.positionX}, ${template.positionY}</span>
+                        ${template.cropTop > 0 ? `<span>•</span><span>Rognage: ${template.cropTop}px</span>` : ''}
                         <span>•</span>
                         <span>${new Date(template.createdAt).toLocaleDateString('fr-FR')}</span>
                     </div>
