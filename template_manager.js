@@ -114,7 +114,16 @@ class TemplateManager {
         document.getElementById('templateName').addEventListener('input', () => this.updatePreview());
         document.getElementById('positionX').addEventListener('input', () => this.updatePreview());
         document.getElementById('positionY').addEventListener('input', () => this.updatePreview());
-        document.getElementById('cropTop').addEventListener('input', () => this.updatePreview());
+        document.getElementById('cropTop').addEventListener('input', () => {
+            if (this.currentFile) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    this.resizeAndProcessImage(event.target.result, this.currentFile.name);
+                };
+                reader.readAsDataURL(this.currentFile);
+            }
+            this.updatePreview();
+        });
 
         // Search functionality
         const searchInput = document.getElementById('searchInput');
@@ -271,6 +280,7 @@ class TemplateManager {
         if (!template) return;
 
         this.editingTemplateId = template.id;
+        this.currentFile = null;
 
         // Populate fields
         const codeInput = document.getElementById('templateCode');
@@ -316,6 +326,7 @@ class TemplateManager {
 
     cancelEdit() {
         this.editingTemplateId = null;
+        this.currentFile = null;
 
         // Reset form
         document.getElementById('templateForm').reset();
@@ -365,6 +376,7 @@ class TemplateManager {
     handleFileChange(e) {
         const file = e.target.files[0];
         if (!file) return;
+        this.currentFile = file;
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
