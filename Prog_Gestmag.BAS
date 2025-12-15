@@ -1130,7 +1130,7 @@ Sub Menu Misc 1
 Sub Menu Misc 2
 Sub Menu Misc 3
 EOP
-DOWNLOAD F,"1.BAS"
+DOWNLOAD F,"RD1.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem1$) <> 12 THEN
@@ -1151,12 +1151,12 @@ DOWNLOAD F,"1.BAS"
         REM Pour autres résolutions
     ENDIF
 EOP
-DOWNLOAD F,"1.INI"
+DOWNLOAD F,"RD1.INI"
 REM - Init file for Template
 Menu = 1
 Item_1 = CAB
 EOP
-DOWNLOAD F,"2.BAS"
+DOWNLOAD F,"RD2.BAS"
     qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
     REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem1$) <> 12 THEN
@@ -1178,13 +1178,13 @@ DOWNLOAD F,"2.BAS"
         REM Pour autres résolutions
     ENDIF
 EOP
-DOWNLOAD F,"2.INI"
+DOWNLOAD F,"RD2.INI"
 REM - Init file for Template
 Menu = 2
 Item_1 = CAB
 Item_2 = Prix
 EOP
-DOWNLOAD F,"3.BAS"
+DOWNLOAD F,"RD3.BAS"
     qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
     REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem2$) <> 12 THEN
@@ -1207,7 +1207,7 @@ DOWNLOAD F,"3.BAS"
         REM Pour autres résolutions
     ENDIF
 EOP
-DOWNLOAD F,"3.INI"
+DOWNLOAD F,"RD3.INI"
 REM - Init file for Template
 Menu = 3
 Item_1 = Libelle
