@@ -1847,7 +1847,7 @@ DOWNLOAD F,"PRO09.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pro09.bmp", 1 
+        PUTBMP 22, 22, "pro09.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2060,7 +2060,7 @@ DOWNLOAD F,"PRO14.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pro14.bmp", 1 
+        PUTBMP 22, 22, "pro14.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2076,7 +2076,7 @@ DOWNLOAD F,"MAI01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mai01.bmp", 1 
+        PUTBMP 22, 22, "mai01.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2092,7 +2092,7 @@ DOWNLOAD F,"MAI02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mai02.bmp", 1 
+        PUTBMP 22, 22, "mai02.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2108,7 +2108,7 @@ DOWNLOAD F,"MAI03.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mai03.bmp", 1 
+        PUTBMP 22, 22, "mai03.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2124,7 +2124,7 @@ DOWNLOAD F,"MAI04.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mai04.bmp", 1 
+        PUTBMP 22, 22, "mai04.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2140,7 +2140,7 @@ DOWNLOAD F,"BOU11.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "bou11.bmp", 1 
+        PUTBMP 22, 22, "bou11.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2156,7 +2156,7 @@ DOWNLOAD F,"BOU20.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "bou20.bmp", 1 
+        PUTBMP 22, 22, "bou20.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2172,7 +2172,7 @@ DOWNLOAD F,"BOU25.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "bou25.bmp", 1 
+        PUTBMP 22, 22, "bou25.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2188,7 +2188,7 @@ DOWNLOAD F,"BOU30.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "bou30.bmp", 1 
+        PUTBMP 22, 22, "bou30.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2204,7 +2204,7 @@ DOWNLOAD F,"BAR01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "bar01.bmp", 1 
+        PUTBMP 22, 22, "bar01.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2220,7 +2220,7 @@ DOWNLOAD F,"BAR02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "bar02.bmp", 1 
+        PUTBMP 22, 22, "bar02.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2236,7 +2236,7 @@ DOWNLOAD F,"BAR03.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "bar03.bmp", 1 
+        PUTBMP 22, 22, "bar03.bmp", 1 
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
@@ -2256,7 +2256,7 @@ DOWNLOAD F,"PRE01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre01.bmp", 1 
+        PUTBMP 22, 22, "pre01.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2269,7 +2269,7 @@ DOWNLOAD F,"PRE02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre02.bmp", 1 
+        PUTBMP 22, 22, "pre02.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2282,7 +2282,7 @@ DOWNLOAD F,"PRE03.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre03.bmp", 1 
+        PUTBMP 22, 22, "pre03.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2295,7 +2295,7 @@ DOWNLOAD F,"PRE04.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre04.bmp", 1 
+        PUTBMP 22, 22, "pre04.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2308,7 +2308,7 @@ DOWNLOAD F,"PRE05.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre05.bmp", 1 
+        PUTBMP 22, 22, "pre05.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2321,7 +2321,7 @@ DOWNLOAD F,"PRE06.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre06.bmp", 1 
+        PUTBMP 22, 22, "pre06.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2334,7 +2334,7 @@ DOWNLOAD F,"PRE07.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre07.bmp", 1 
+        PUTBMP 22, 22, "pre07.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2347,7 +2347,7 @@ DOWNLOAD F,"PRE08.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre08.bmp", 1 
+        PUTBMP 22, 22, "pre08.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2360,7 +2360,7 @@ DOWNLOAD F,"PRE09.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre09.bmp", 1 
+        PUTBMP 22, 22, "pre09.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2373,7 +2373,7 @@ DOWNLOAD F,"PRE10.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre10.bmp", 1 
+        PUTBMP 22, 22, "pre10.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2386,7 +2386,7 @@ DOWNLOAD F,"PRE11.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre11.bmp", 1 
+        PUTBMP 22, 22, "pre11.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2399,7 +2399,7 @@ DOWNLOAD F,"PRE12.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre12.bmp", 1 
+        PUTBMP 22, 22, "pre12.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2412,7 +2412,7 @@ DOWNLOAD F,"PRE13.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre13.bmp", 1 
+        PUTBMP 22, 22, "pre13.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2425,7 +2425,7 @@ DOWNLOAD F,"PRE14.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre14.bmp", 1 
+        PUTBMP 22, 22, "pre14.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2438,7 +2438,7 @@ DOWNLOAD F,"PRE15.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "pre15.bmp", 1 
+        PUTBMP 22, 22, "pre15.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2451,7 +2451,7 @@ DOWNLOAD F,"COM01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "com01.bmp", 1 
+        PUTBMP 22, 22, "com01.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2464,7 +2464,7 @@ DOWNLOAD F,"COM02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "com02.bmp", 1 
+        PUTBMP 22, 22, "com02.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2477,7 +2477,7 @@ DOWNLOAD F,"COM03.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "com03.bmp", 1 
+        PUTBMP 22, 22, "com03.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2490,7 +2490,7 @@ DOWNLOAD F,"COM04.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "com04.bmp", 1 
+        PUTBMP 22, 22, "com04.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2503,7 +2503,7 @@ DOWNLOAD F,"COM05.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "com05.bmp", 1 
+        PUTBMP 22, 22, "com05.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2516,7 +2516,7 @@ DOWNLOAD F,"COM06.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "com06.bmp", 1 
+        PUTBMP 22, 22, "com06.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2529,7 +2529,7 @@ DOWNLOAD F,"ORI01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "ori01.bmp", 1 
+        PUTBMP 22, 22, "ori01.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2542,7 +2542,7 @@ DOWNLOAD F,"ORI02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "ori02.bmp", 1 
+        PUTBMP 22, 22, "ori02.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2555,7 +2555,7 @@ DOWNLOAD F,"MAR01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar01.bmp", 1 
+        PUTBMP 22, 22, "mar01.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2568,7 +2568,7 @@ DOWNLOAD F,"MAR02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar02.bmp", 1 
+        PUTBMP 22, 22, "mar02.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2581,7 +2581,7 @@ DOWNLOAD F,"MAR03.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar03.bmp", 1 
+        PUTBMP 22, 22, "mar03.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2594,7 +2594,7 @@ DOWNLOAD F,"MAR04.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar04.bmp", 1 
+        PUTBMP 22, 22, "mar04.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2607,7 +2607,7 @@ DOWNLOAD F,"MAR05.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar05.bmp", 1 
+        PUTBMP 22, 22, "mar05.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2620,7 +2620,7 @@ DOWNLOAD F,"MAR06.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar06.bmp", 1 
+        PUTBMP 22, 22, "mar06.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2633,7 +2633,7 @@ DOWNLOAD F,"MAR07.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar07.bmp", 1 
+        PUTBMP 22, 22, "mar07.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2646,7 +2646,7 @@ DOWNLOAD F,"MAR08.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar08.bmp", 1 
+        PUTBMP 22, 22, "mar08.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2659,7 +2659,7 @@ DOWNLOAD F,"MAR09.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "mar09.bmp", 1 
+        PUTBMP 22, 22, "mar09.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2672,7 +2672,7 @@ DOWNLOAD F,"FET01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet01.bmp", 1 
+        PUTBMP 22, 22, "fet01.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2685,7 +2685,7 @@ DOWNLOAD F,"FET02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet02.bmp", 1 
+        PUTBMP 22, 22, "fet02.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2698,7 +2698,7 @@ DOWNLOAD F,"FET03.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet03.bmp", 1 
+        PUTBMP 22, 22, "fet03.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2711,7 +2711,7 @@ DOWNLOAD F,"FET04.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet04.bmp", 1 
+        PUTBMP 22, 22, "fet04.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2724,7 +2724,7 @@ DOWNLOAD F,"FET05.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet05.bmp", 1 
+        PUTBMP 22, 22, "fet05.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2737,7 +2737,7 @@ DOWNLOAD F,"FET06.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet06.bmp", 1 
+        PUTBMP 22, 22, "fet06.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2750,7 +2750,7 @@ DOWNLOAD F,"FET07.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet07.bmp", 1 
+        PUTBMP 22, 22, "fet07.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2763,7 +2763,7 @@ DOWNLOAD F,"FET08.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet08.bmp", 1 
+        PUTBMP 22, 22, "fet08.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2776,7 +2776,7 @@ DOWNLOAD F,"FET09.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "fet09.bmp", 1 
+        PUTBMP 22, 22, "fet09.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2789,7 +2789,7 @@ DOWNLOAD F,"PIZ01.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz01.bmp", 1 
+        PUTBMP 22, 22, "piz01.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2802,7 +2802,7 @@ DOWNLOAD F,"PIZ02.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz02.bmp", 1 
+        PUTBMP 22, 22, "piz02.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2815,7 +2815,7 @@ DOWNLOAD F,"PIZ03.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz03.bmp", 1 
+        PUTBMP 22, 22, "piz03.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2828,7 +2828,7 @@ DOWNLOAD F,"PIZ05.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz05.bmp", 1 
+        PUTBMP 22, 22, "piz05.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2841,7 +2841,7 @@ DOWNLOAD F,"PIZ06.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz06.bmp", 1 
+        PUTBMP 22, 22, "piz06.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2854,7 +2854,7 @@ DOWNLOAD F,"PIZ07.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz07.bmp", 1 
+        PUTBMP 22, 22, "piz07.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2867,7 +2867,7 @@ DOWNLOAD F,"PIZ08.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz08.bmp", 1 
+        PUTBMP 22, 22, "piz08.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2880,7 +2880,7 @@ DOWNLOAD F,"PIZ09.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz09.bmp", 1 
+        PUTBMP 22, 22, "piz09.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2893,7 +2893,7 @@ DOWNLOAD F,"PIZ10.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz10.bmp", 1 
+        PUTBMP 22, 22, "piz10.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2906,7 +2906,7 @@ DOWNLOAD F,"PIZ11.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz11.bmp", 1 
+        PUTBMP 22, 22, "piz11.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2919,7 +2919,7 @@ DOWNLOAD F,"PIZ12.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz12.bmp", 1 
+        PUTBMP 22, 22, "piz12.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2932,7 +2932,7 @@ DOWNLOAD F,"PIZ13.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz13.bmp", 1 
+        PUTBMP 22, 22, "piz13.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2945,7 +2945,7 @@ DOWNLOAD F,"PIZ14.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz14.bmp", 1 
+        PUTBMP 22, 22, "piz14.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2958,7 +2958,7 @@ DOWNLOAD F,"PIZ15.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz15.bmp", 1 
+        PUTBMP 22, 22, "piz15.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2971,7 +2971,7 @@ DOWNLOAD F,"PIZ16.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz16.bmp", 1 
+        PUTBMP 22, 22, "piz16.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2984,7 +2984,7 @@ DOWNLOAD F,"PIZ17.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz17.bmp", 1 
+        PUTBMP 22, 22, "piz17.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -2997,7 +2997,7 @@ DOWNLOAD F,"PIZ18.BAS"
         SIZE 46 mm, 46 mm  
         DIRECTION 1
         CLS
-        PUTBMP 8, 22, "piz18.bmp", 1 
+        PUTBMP 22, 22, "piz18.bmp", 1 
         PRINT VAL(qQty$)
     ENDIF
 EOP
@@ -3246,7 +3246,7 @@ DOWNLOAD F,"BOU10.BAS"
         SIZE 46 mm, 46 mm
         DIRECTION 1
         CLS
-        PUTBMP 25, 22, "bou10.bmp", 1
+        PUTBMP 30, 22, "bou10.bmp", 1
         PRINT VAL(qQty$)
     ENDIF
 EOP
