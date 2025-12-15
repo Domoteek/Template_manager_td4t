@@ -3268,7 +3268,7 @@ DOWNLOAD F,"ABA02.BAS"
         SIZE 46 mm, 46 mm
         DIRECTION 1
         CLS
-        PUTBMP 25, 22, "aba02.bmp", 1
+        PUTBMP 26, 22, "aba02.bmp", 1
         PRINT VAL(qQty$)
     ENDIF
 EOP

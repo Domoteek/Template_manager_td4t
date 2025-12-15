@@ -105,6 +105,8 @@ function handleListTemplates(req, res) {
             // Exclusions système ET 'USB'
             .filter(file => !file.startsWith('Logo_GM') && !file.startsWith('.') && !file.toUpperCase().startsWith('USB'));
 
+        const metadata = extractMetadataFromBas();
+
         const templates = bmpFiles.map(file => {
             const code = path.parse(file).name.toUpperCase();
             // Logique de catégorie partagée
@@ -112,12 +114,17 @@ function handleListTemplates(req, res) {
             // Utilisation du mapping centralisé
             let category = CATEGORY_MAPPINGS[prefix] || prefix;
 
+            const meta = metadata[code] || {};
+
             return {
                 code: code,
                 // Nom par défaut, le frontend pourra enrichir
                 name: `${category} ${code.replace(prefix, '')}`,
                 category: category,
                 imageData: file, // Chemin relatif
+                positionX: meta.positionX !== undefined ? meta.positionX : 22,
+                positionY: meta.positionY !== undefined ? meta.positionY : 22,
+                cropTop: meta.cropTop !== undefined ? meta.cropTop : 0,
                 isExisting: true
             };
         });
@@ -599,3 +606,37 @@ server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
     console.log('Press Ctrl+C to stop');
 });
+
+function extractMetadataFromBas() {
+    const progPath = path.join(WORK_DIR, 'Prog_Gestmag.BAS');
+    if (!fs.existsSync(progPath)) return {};
+
+    const content = fs.readFileSync(progPath, 'utf8');
+    const metadata = {};
+
+    // 1. Extract X/Y from BAS blocks
+    // Pattern: DOWNLOAD F,"CODE.BAS" ... PUTBMP X, Y ...
+    const basRegex = /DOWNLOAD F,"(.*?)\.BAS"[\s\S]*?PUTBMP\s+(\d+),\s+(\d+)/gi;
+    let match;
+    while ((match = basRegex.exec(content)) !== null) {
+        const code = match[1].toUpperCase();
+        const x = parseInt(match[2]);
+        const y = parseInt(match[3]);
+        if (!metadata[code]) metadata[code] = {};
+        metadata[code].positionX = x;
+        metadata[code].positionY = y;
+    }
+
+    // 2. Extract CropTop from INI blocks
+    // Pattern: DOWNLOAD F,"CODE.INI" ... REM - CROPTOP = Val
+    const iniRegex = /DOWNLOAD F,"(.*?)\.INI"[\s\S]*?REM - CROPTOP\s*=\s*(\d+)/gi;
+    let cropMatch;
+    while ((cropMatch = iniRegex.exec(content)) !== null) {
+        const code = cropMatch[1].toUpperCase();
+        const crop = parseInt(cropMatch[2]);
+        if (!metadata[code]) metadata[code] = {};
+        metadata[code].cropTop = crop;
+    }
+
+    return metadata;
+}
