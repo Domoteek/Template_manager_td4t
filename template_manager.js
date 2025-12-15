@@ -28,9 +28,9 @@ class TemplateManager {
                         ...t,
                         category: t.category || local.category,
                         description: local.description || `Template ${t.category}`, // Description par défaut si vide
-                        positionX: local.positionX || 22,
-                        positionY: local.positionY || 22,
-                        cropTop: local.cropTop || 0,
+                        positionX: local.positionX !== undefined ? local.positionX : (t.positionX !== undefined ? t.positionX : 22),
+                        positionY: local.positionY !== undefined ? local.positionY : (t.positionY !== undefined ? t.positionY : 22),
+                        cropTop: local.cropTop !== undefined ? local.cropTop : (t.cropTop !== undefined ? t.cropTop : 0),
                         // Conserver les dates si dispos
                         createdAt: local.createdAt || new Date().toISOString()
                     };

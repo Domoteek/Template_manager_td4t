@@ -211,7 +211,7 @@ EOP`;
         SIZE 46 mm, 46 mm
         DIRECTION 1
         CLS
-        PUTBMP ${positionX || 8}, ${positionY || 22}, "${lowerCode}.bmp", 1
+        PUTBMP ${positionX !== undefined ? positionX : 8}, ${positionY !== undefined ? positionY : 22}, "${lowerCode}.bmp", 1
         PRINT VAL(qQty$)
     ENDIF
 EOP`;
