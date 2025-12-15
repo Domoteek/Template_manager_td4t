@@ -168,6 +168,21 @@ class TemplateManager {
                 this.handleFileChange({ target: fileInput });
             }
         });
+
+        // Preview Height Control
+        const heightInput = document.getElementById('previewHeight');
+        const heightVal = document.getElementById('previewHeightVal');
+        const previewContainer = document.querySelector('.preview-image-container');
+
+        if (heightInput && previewContainer) {
+            heightInput.addEventListener('input', (e) => {
+                const val = e.target.value;
+                previewContainer.style.height = `${val}px`;
+                // Remove aspect-ratio to allow custom height
+                previewContainer.style.aspectRatio = 'auto';
+                if (heightVal) heightVal.textContent = `${val}px`;
+            });
+        }
     }
 
     async handleFormSubmit(e) {
