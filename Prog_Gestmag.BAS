@@ -1710,6 +1710,45 @@ Menu = 2
 Item_1 = Prix
 Item_2 = CAB
 EOP
+
+DOWNLOAD F,"DLC03.BAS"
+    qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+    IF qTphDpi$ = "203" THEN
+        REM Ok for TD-4650TNWB
+        CLS
+        DIRECTION 1
+        
+        REM Titre "DLC COURTE"
+        qW1 = TEXTPIXEL("DLC COURTE", "0", 12)
+        qStart1 = 187 - (qW1 / 2)
+        TEXT qStart1, 25, "0",0, 12, 12, 1, "DLC COURTE"
+
+        REM Ancien Prix (Barre)
+        qW2 = TEXTPIXEL(qItem1$ + "€", "0", 15)
+        qStart2 = 187 - (qW2 / 2)
+        TEXT qStart2, 60, "0",0, 15, 15, 1, qItem1$ + "€"
+        BAR qStart2, 80, qW2, 3
+        
+        REM Nouveau Prix
+        qW3 = TEXTPIXEL(qItem2$ + "€", "0", 25)
+        qStart3 = 187 - (qW3 / 2)
+        TEXT qStart3, 110, "0",0, 25, 25, 1, qItem2$ + "€"
+
+        REM Barcode
+        BARCODE 187,175, "EAN13",60, 1, 0, 2, 1, 2, qItem3$
+        
+        PRINT VAL(qQty$)
+    ELSE
+        REM To work for TD-4750TNWB
+    ENDIF
+EOP
+DOWNLOAD F,"DLC03.INI"
+REM - Init file for Template
+Menu = 3
+Item_1 = Ancien
+Item_2 = Nouveau
+Item_3 = CAB
+EOP
 DOWNLOAD F,"DLC01.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
