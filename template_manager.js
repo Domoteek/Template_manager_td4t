@@ -294,6 +294,13 @@ class TemplateManager {
         }
         if (!template) return;
 
+        // Protected check
+        const PROTECTED_CODES = ['1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'V0'];
+        if (PROTECTED_CODES.includes(template.code)) {
+            this.showToast('Ce template (Texte/CodeBarre) ne peut pas être modifié ici.', 'error');
+            return;
+        }
+
         this.editingTemplateId = template.id;
         this.currentFile = null;
 
@@ -598,29 +605,50 @@ class TemplateManager {
             const imageSrc = template.isExisting ? template.imageData : template.imageData;
             const categoryBadge = template.category ? `<span class="category-badge">${template.category}</span>` : '';
 
+            // Protected templates (Text/Barcode) that should not be edited via this interface
+            const PROTECTED_CODES = ['1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'V0'];
+            const isProtected = PROTECTED_CODES.includes(template.code);
+
+            const editButton = isProtected
+                ? `<button class="icon-btn" style="opacity: 0.3; cursor: not-allowed;" title="Modifiction interdite (Template Texte/CodeBarre)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                   </button>`
+                : `<button class="icon-btn" onclick="templateManager.editTemplate('${template.code}')" title="Modifier">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                   </button>`;
+
+            const deleteButton = isProtected
+                ? `<button class="icon-btn delete" style="opacity: 0.3; cursor: not-allowed;" title="Suppression interdite (Template Texte/CodeBarre)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                             <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                   </button>`
+                : `<button class="icon-btn delete" onclick="templateManager.deleteTemplate('${template.code}')" title="Supprimer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>`;
+
             return `
             <div class="template-card" data-id="${template.id}">
                 <div class="template-card-image">
                     <img src="${imageSrc}" alt="${template.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3E${template.code}%3C/text%3E%3C/svg%3E'">
                     <div class="template-card-actions overlay">
-                        <button class="icon-btn" onclick="templateManager.editTemplate('${template.code}')" title="Modifier">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                            </svg>
-                        </button>
+                        ${editButton}
                         <button class="icon-btn" onclick="templateManager.viewTemplate('${template.code}')" title="Voir l'image">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                         </button>
-                        <button class="icon-btn delete" onclick="templateManager.deleteTemplate('${template.code}')" title="Supprimer">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                        </button>
+                        ${deleteButton}
                     </div>
                 </div>
                 <div class="template-card-content">
@@ -794,6 +822,13 @@ class TemplateManager {
             template = this.templates.find(t => t.code === code);
         }
         if (!template) return;
+
+        // Protected check
+        const PROTECTED_CODES = ['1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'V0'];
+        if (PROTECTED_CODES.includes(template.code)) {
+            this.showToast('Ce template (Texte/CodeBarre) ne peut pas être supprimé.', 'error');
+            return;
+        }
 
         const modal = document.getElementById('confirmModal');
         const confirmBtn = document.getElementById('confirmDeleteBtn');

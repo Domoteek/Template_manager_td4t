@@ -109,17 +109,24 @@ function handleListTemplates(req, res) {
 
         const templates = bmpFiles.map(file => {
             const code = path.parse(file).name.toUpperCase();
-            // Logique de catégorie partagée
-            const prefix = code.replace(/[0-9]/g, '');
-            // Utilisation du mapping centralisé
-            let category = CATEGORY_MAPPINGS[prefix] || prefix;
+
+            // Special handling for 40x27 templates
+            const code40x27 = ['1', '2', '3', '4', '5', '10'];
+            let category;
+
+            if (code40x27.includes(code)) {
+                category = '40x27'; // Or '40x27 BLANCHE' if preferred, keeping it short for UI
+            } else {
+                const prefix = code.replace(/[0-9]/g, '');
+                category = CATEGORY_MAPPINGS[prefix] || prefix;
+            }
 
             const meta = metadata[code] || {};
 
             return {
                 code: code,
                 // Nom par défaut, le frontend pourra enrichir
-                name: `${category} ${code.replace(prefix, '')}`,
+                name: `${category} ${code}`,
                 category: category,
                 imageData: file, // Chemin relatif
                 positionX: meta.positionX !== undefined ? meta.positionX : 22,
@@ -360,16 +367,20 @@ function handleGenerateManual(req, res) {
                 // Trouver le préfixe
                 let prefix = code.replace(/[0-9]/g, ''); // Enlever les chiffres
 
-                // Cas particuliers ou nettoyage
-                if (prefix === 'M' || prefix === 'MAR') {
-                    // Laisser tel quel, le mapping gérera
+                // Special handling for 40x27 templates
+                const code40x27 = ['1', '2', '3', '4', '5', '10'];
+                let categoryName;
+
+                if (code40x27.includes(code)) {
+                    categoryName = '40x27';
+                    prefix = '40x27'; // To avoid empty parentheses in title
+                } else {
+                    // Cas particuliers ou nettoyage
+                    if (prefix === 'M' || prefix === 'MAR') {
+                        // Laisser tel quel, le mapping gérera
+                    }
+                    categoryName = CATEGORY_MAPPINGS[prefix] || prefix;
                 }
-
-                // Normalisation pour le groupement
-                // Spécial pour PRO et PR qui vont sans doute ensemble dans Promo ?
-                // Dans le mapping ci-dessus PR -> PROMO et PRO -> PROMO, donc on peut grouper par CategoryName
-
-                let categoryName = CATEGORY_MAPPINGS[prefix] || prefix;
 
                 if (!groups[categoryName]) {
                     groups[categoryName] = {

@@ -1151,6 +1151,239 @@ DOWNLOAD F,"RD1.BAS"
         REM Pour autres résolutions
     ENDIF
 EOP
+
+
+### TEMPLATE POUR ETIQUETTE 40x27 blanche
+DOWNLOAD F,"1.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	
+	REM Vérification que le code EAN a bien 12 caractères
+    IF LEN(qItem1$) <> 12 THEN
+        CLS
+        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        PRINT 1
+        END
+    ENDIF
+    
+    IF qTphDpi$ = "203" THEN
+        REM Format 46x39mm
+        CLS
+        DIRECTION 1
+        BARCODE 187, 50, "EAN13", 100, 1, 0, 2, 1, 2, qItem1$
+        PRINT VAL(qQty$)
+    ELSE
+        REM Pour autres résolutions
+    ENDIF
+EOP
+
+DOWNLOAD F,"1.INI"
+REM - Init file for Template
+Menu = 1
+Item_1 = CAB
+EOP
+
+DOWNLOAD F,"2.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	
+	REM Vérification que le code EAN a bien 12 caractères
+    IF LEN(qItem1$) <> 12 THEN
+        CLS
+        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        PRINT 1
+        END
+    ENDIF
+	
+	
+	IF qTphDpi$ = "203" THEN
+		REM Ok for TD-4650TNWB
+		CLS
+		DIRECTION 1
+		REM BARCODE 200,20, "EAN13",100,1,0,3,1,2, qItem1$
+		REM TEXT 200, 160, "0",0, 16, 16, 2, "PRIX: " + qItem2$ + "€"
+		BARCODE 187, 50, "EAN13", 60, 1, 0, 2, 1, 2, qItem1$
+		TEXT 187, 150, "0", 0, 12, 12, 2, "PRIX: " + qItem2$ + "€"
+		PRINT VAL(qQty$)
+	ELSE
+		REM To work for TD-4750TNWB
+	ENDIF
+EOP
+
+DOWNLOAD F,"2.INI"
+REM - Init file for Template
+Menu = 2
+Item_1 = CAB
+Item_2 = Prix
+EOP
+
+DOWNLOAD F,"3.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	
+	REM Vérification que le code EAN a bien 12 caractères
+    IF LEN(qItem2$) <> 12 THEN
+        CLS
+        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        PRINT 1
+        END
+    ENDIF
+	
+	IF qTphDpi$ = "203" THEN
+		REM Ok for TD-4650TNWB
+		CLS
+		DIRECTION 1
+		REM TEXT 200, 20, "0",0, 11, 11,2, qItem1$
+		REM BARCODE 200,50, "EAN13",80,1,0,3,1,2, qItem2$
+		REM TEXT 200, 160, "0",0, 16, 16, 2, "PRIX: " + qItem3$ + "€"
+		TEXT 187, 20, "0",0, 11, 11,2, qItem1$
+		BARCODE 187, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
+		TEXT 187, 160, "0", 0, 12, 12, 2, "PRIX: " + qItem3$ + "€"
+		PRINT VAL(qQty$)
+	ELSE
+		REM To work for TD-4750TNWB
+	ENDIF
+EOP
+
+DOWNLOAD F,"3.INI"
+REM - Init file for Template
+Menu = 3
+Item_1 = Libelle
+Item_2 = CAB
+Item_3 = Prix
+EOP
+
+DOWNLOAD F,"4.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	
+	REM Vérification que le code EAN a bien 12 caractères
+    IF LEN(qItem2$) <> 12 THEN
+        CLS
+        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        PRINT 1
+        END
+    ENDIF
+	
+	IF qTphDpi$ = "203" THEN
+		REM Ok for TD-4650TNWB
+		CLS
+		DIRECTION 1
+		TEXT 187, 20, "0",0, 11, 11,2, qItem1$
+		BARCODE 187, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
+		
+		REM Calcul des largeurs pour centrage et barré
+		qStr1$ = "PRIX: "
+		qStr2$ = qItem3$ + "€"
+		qStr3$ = " / "
+		qStr4$ = qItem4$ + "€"
+		
+		qW1 = TEXTPIXEL(qStr1$, "0", 12)
+		qW2 = TEXTPIXEL(qStr2$, "0", 12)
+		qW3 = TEXTPIXEL(qStr3$, "0", 12)
+		qW4 = TEXTPIXEL(qStr4$, "0", 12)
+		
+		qTotalW = qW1 + qW2 + qW3 + qW4
+		qStartX = 180 - (qTotalW / 2)
+		
+		REM Affichage
+		TEXT qStartX, 160, "0", 0, 12, 12, 1, qStr1$
+		TEXT qStartX + qW1, 160, "0", 0, 12, 12, 1, qStr2$
+		BAR qStartX + qW1, 170, qW2, 2
+		TEXT qStartX + qW1 + qW2, 160, "0", 0, 12, 12, 1, qStr3$
+		TEXT qStartX + qW1 + qW2 + qW3, 160, "0", 0, 12, 12, 1, qStr4$
+		
+		PRINT VAL(qQty$)
+	ELSE
+		REM To work for TD-4750TNWB
+	ENDIF
+EOP
+
+DOWNLOAD F,"4.INI"
+REM - Init file for Template
+Menu = 4
+Item_1 = Libelle
+Item_2 = CAB
+Item_3 = Ancien
+Item_4 = Nouveau
+EOP
+
+DOWNLOAD F,"10.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	
+	IF qTphDpi$ = "203" THEN
+		REM Ok for TD-4650TNWB
+		CLS
+		DIRECTION 1
+		REM Ancien Prix (Barre)
+		qW1 = TEXTPIXEL(qItem1$ + "€", "0", 35)
+		qStart1 = 187 - (qW1 / 2)
+		TEXT qStart1, 20, "0",0, 35, 35, 1, qItem1$ + "€"
+		BAR qStart1, 45, qW1, 4
+		
+		REM Nouveau Prix
+		qW2 = TEXTPIXEL(qItem2$ + "€", "0", 35)
+		qStart2 = 187 - (qW2 / 2)
+		TEXT qStart2, 120, "0",0, 35, 35, 1, qItem2$ + "€"
+		
+		PRINT VAL(qQty$)
+	ELSE
+		REM To work for TD-4750TNWB
+	ENDIF
+EOP
+
+DOWNLOAD F,"10.INI"
+REM - Init file for Template
+Menu = 2
+Item_1 = Ancien
+Item_2 = Nouveau
+EOP
+
+DOWNLOAD F,"5.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	
+	IF qTphDpi$ = "203" THEN
+		REM Ok for TD-4650TNWB
+		CLS
+		DIRECTION 1
+		
+		REM Ligne 1 - Centrée
+		qW1 = TEXTPIXEL(qItem1$, "0", 12)
+		qStart1 = 187 - (qW1 / 2)
+		TEXT qStart1, 40, "0", 0, 12, 12, 1, qItem1$
+		
+		REM Ligne 2 - Centrée
+		qW2 = TEXTPIXEL(qItem2$, "0", 12)
+		qStart2 = 187 - (qW2 / 2)
+		TEXT qStart2, 90, "0", 0, 12, 12, 1, qItem2$
+		
+		REM Ligne 3 - Centrée
+		qW3 = TEXTPIXEL(qItem3$, "0", 12)
+		qStart3 = 187 - (qW3 / 2)
+		TEXT qStart3, 140, "0", 0, 12, 12, 1, qItem3$
+		
+		PRINT VAL(qQty$)
+	ELSE
+		REM To work for TD-4750TNWB
+	ENDIF
+EOP
+
+DOWNLOAD F,"5.INI"
+REM - Init file for Template
+Menu = 3
+Item_1 = Ligne 1
+Item_2 = Ligne 2
+Item_3 = Ligne 3
+EOP
+
+
+### FIN TEMPLATE POUR ETIQUETTE 40x27 blanche
+
+
 DOWNLOAD F,"RD1.INI"
 REM - Init file for Template
 Menu = 1
@@ -1458,14 +1691,14 @@ DOWNLOAD F,"DLC02.BAS"
 		qStart = 187 - (qW1 / 2)
 		qW1 = TEXTPIXEL("D.L.C", "0", 16)
 		qStart1 = 187 - (qW1 / 2)
-		TEXT qStart1, 20, "0",0, 16, 16, 1, "D.L.C"
+		TEXT qStart1, 22, "0",0, 16, 16, 1, "D.L.C"
 		qW2 = TEXTPIXEL("COURTE", "0", 16)
 		qStart2 = 187 - (qW2 / 2)
 		TEXT qStart2, 70, "0",0, 16, 16, 1, "COURTE"
 		qW3 = TEXTPIXEL(qItem1$ + "€", "0", 20)
 		qStart3 = 187 - (qW3 / 2)
 		TEXT qStart3, 120, "0",0, 20, 20, 1, qItem1$ + "€"
-		BARCODE 187,180, "EAN13",80, 1, 0, 2, 1, 2, qItem2$
+		BARCODE 187,175, "EAN13",80, 1, 0, 2, 1, 2, qItem2$
 		PRINT VAL(qQty$)
 	ELSE
 		REM To work for TD-4750TNWB
@@ -1506,10 +1739,10 @@ DOWNLOAD F,"DLC30.BAS"
 		DIRECTION 1
 		qW1 = TEXTPIXEL("D.L.C", "0", 16)
 		qStart1 = 187 - (qW1 / 2)
-		TEXT qStart1, 15, "0",0, 16, 16, 1, "D.L.C"
+		TEXT qStart1, 20, "0",0, 16, 16, 1, "D.L.C"
 		qW2 = TEXTPIXEL("COURTE", "0", 16)
 		qStart2 = 187 - (qW2 / 2)
-		TEXT qStart2, 55, "0",0, 16, 16, 1, "COURTE"
+		TEXT qStart2, 60, "0",0, 16, 16, 1, "COURTE"
 		qW3 = TEXTPIXEL("A CONSOMMER RAPIDEMENT", "0", 8)
 		qStart3 = 187 - (qW3 / 2)
 		TEXT qStart3, 100, "0",0, 8, 8, 1, "A CONSOMMER RAPIDEMENT"
@@ -1539,10 +1772,10 @@ DOWNLOAD F,"DLC40.BAS"
 		DIRECTION 1
 		qW1 = TEXTPIXEL("D.L.C", "0", 16)
 		qStart1 = 187 - (qW1 / 2)
-		TEXT qStart1, 15, "0",0, 16, 16, 1, "D.L.C"
+		TEXT qStart1, 20, "0",0, 16, 16, 1, "D.L.C"
 		qW2 = TEXTPIXEL("COURTE", "0", 16)
 		qStart2 = 187 - (qW2 / 2)
-		TEXT qStart2, 55, "0",0, 16, 16, 1, "COURTE"
+		TEXT qStart2, 60, "0",0, 16, 16, 1, "COURTE"
 		qW3 = TEXTPIXEL("A CONSOMMER RAPIDEMENT", "0", 8)
 		qStart3 = 187 - (qW3 / 2)
 		TEXT qStart3, 100, "0",0, 8, 8, 1, "A CONSOMMER RAPIDEMENT"
@@ -1572,10 +1805,10 @@ DOWNLOAD F,"DLC20.BAS"
 		DIRECTION 1
 		qW1 = TEXTPIXEL("D.L.C", "0", 16)
 		qStart1 = 187 - (qW1 / 2)
-		TEXT qStart1, 15, "0",0, 16, 16, 1, "D.L.C"
+		TEXT qStart1, 20, "0",0, 16, 16, 1, "D.L.C"
 		qW2 = TEXTPIXEL("COURTE", "0", 16)
 		qStart2 = 187 - (qW2 / 2)
-		TEXT qStart2, 55, "0",0, 16, 16, 1, "COURTE"
+		TEXT qStart2, 60, "0",0, 16, 16, 1, "COURTE"
 		qW3 = TEXTPIXEL("A CONSOMMER RAPIDEMENT", "0", 8)
 		qStart3 = 187 - (qW3 / 2)
 		TEXT qStart3, 100, "0",0, 8, 8, 1, "A CONSOMMER RAPIDEMENT"
@@ -1605,10 +1838,10 @@ DOWNLOAD F,"DLC50.BAS"
 		DIRECTION 1
 		qW1 = TEXTPIXEL("D.L.C", "0", 16)
 		qStart1 = 187 - (qW1 / 2)
-		TEXT qStart1, 15, "0",0, 16, 16, 1, "D.L.C"
+		TEXT qStart1, 20, "0",0, 16, 16, 1, "D.L.C"
 		qW2 = TEXTPIXEL("COURTE", "0", 16)
 		qStart2 = 187 - (qW2 / 2)
-		TEXT qStart2, 55, "0",0, 16, 16, 1, "COURTE"
+		TEXT qStart2, 60, "0",0, 16, 16, 1, "COURTE"
 		qW3 = TEXTPIXEL("A CONSOMMER RAPIDEMENT", "0", 8)
 		qStart3 = 187 - (qW3 / 2)
 		TEXT qStart3, 100, "0",0, 8, 8, 1, "A CONSOMMER RAPIDEMENT"
@@ -1638,10 +1871,10 @@ DOWNLOAD F,"DLC70.BAS"
 		DIRECTION 1
 		qW1 = TEXTPIXEL("D.L.C", "0", 16)
 		qStart1 = 187 - (qW1 / 2)
-		TEXT qStart1, 15, "0",0, 16, 16, 1, "D.L.C"
+		TEXT qStart1, 20, "0",0, 16, 16, 1, "D.L.C"
 		qW2 = TEXTPIXEL("COURTE", "0", 16)
 		qStart2 = 187 - (qW2 / 2)
-		TEXT qStart2, 55, "0",0, 16, 16, 1, "COURTE"
+		TEXT qStart2, 60, "0",0, 16, 16, 1, "COURTE"
 		qW3 = TEXTPIXEL("A CONSOMMER RAPIDEMENT", "0", 8)
 		qStart3 = 187 - (qW3 / 2)
 		TEXT qStart3, 100, "0",0, 8, 8, 1, "A CONSOMMER RAPIDEMENT"
@@ -3247,6 +3480,12 @@ EOP
 DOWNLOAD F,"BAR03.INI"
 REM - CROPTOP = 10
 EOP
+
+
+
+
+
+
 
 
 RUN "GESTMAG.BAS"
