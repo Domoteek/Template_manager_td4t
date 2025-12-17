@@ -28,14 +28,46 @@ GOSUB ZEND
 REM -------------------------------------------
 :ZAPPSETTINGS
 REM Settings for the main application
-	REM qWidth = VAL(qTphDpi$)*2
-	REM qLength = VAL(qTphDpi$)*1	
-	qWidth = 374   ' 46mm à 203 dpi (46*203/25.4 = 367.6 arrondi à 374)
-    qLength = 374  ' 46mm à 203 dpi (46*203/25.4 = 367.6 arrondi à 374)
 	CODEPAGE UTF-8
+    
+    REM Read Language
 	qCheckFile$ = "CONFIG.DAT"
 	GOSUB ZCHECKFILE
 	IF qCheckFile = 1 THEN GOSUB ZCFGREAD
+
+    REM Read Format
+    qFormat$ = "1"
+    qCheckFile$ = "FORMAT.DAT"
+    GOSUB ZCHECKFILE
+    IF qCheckFile = 1 THEN
+        OPEN "FORMAT.DAT", 1
+        SEEK 1,0
+        READ 1, qFormat$
+        CLOSE 1
+    ENDIF
+
+    REM Apply Dimensions based on Format
+    REM 1 = 46x46 (Default)
+    IF qFormat$ = "1" THEN
+        qWidth = 374
+        qLength = 374
+        REFERENCE 0,0
+    ENDIF
+    
+    REM 2 = 39x46
+    IF qFormat$ = "2" THEN
+        qWidth = 312
+        qLength = 374
+        REFERENCE 0,0
+    ENDIF
+    
+    REM 3 = 40x27
+    IF qFormat$ = "3" THEN
+        qWidth = 320
+        qLength = 216
+        REFERENCE 24,0
+    ENDIF
+
 	qLibelStp = 0
 	qQty = 1
 RETURN
@@ -684,7 +716,7 @@ RETURN
 REM -------------------------------------------
 :zKEYFUNCTION
 REM Handle default key function
-	IF qKey = 1 THEN FORMFEED
+	IF qKey = 1 THEN GOSUB ZCALIBRATE
 	REM IF qKey = 1 THEN GOSUB ZPRINTDEMOLABEL
 	IF qKey = 2 THEN GOSUB ZMENUDFLT
 	REM IF qKey = 3 THEN GOSUB ZPRINTDEMOLABEL
@@ -693,6 +725,109 @@ REM Handle default key function
 	REM IF qKey = 6 THEN GOSUB ZPRINTDEMOLABEL
 	REM Reset key value
 	qKey = 0
+RETURN
+REM -------------------------------------------
+:ZCALIBRATE
+	REM Affichage du Menu
+	qDebugMsg$ = "[ZCALIBRATE] Menu Keybd"
+	GOSUB ZDEBUGMSG
+	qLibelStp = 0
+	
+	REM Configuration de l'affichage
+	qDispAppLine1$ = "CALIBRATION"
+	qDispAppLine2$ = "1. Ronde 46x46"
+	qDispAppLine3$ = ""
+	qDispAppLine4$ = "2. Ovale 39x46"
+	qDispAppLine5$ = ""
+	qDispAppLine6$ = "3. Petite 40x27"
+	qDispAppLine7$ = ""
+	qDispAppLine8$ = "Tapez 1, 2 ou 3"
+	qDispAppLine9$ = ""
+	
+	GOSUB ZDISPAPP
+	
+	REM Boucle d'attente de touche
+	qLoopCalib = 1
+	GOSUB ZGETDATARESET
+	
+	WHILE qLoopCalib = 1
+		GOSUB ZGETDATA
+		
+		REM Nettoyage de l'entree (au cas ou CR/LF traine)
+		qChoice$ = qData$
+		
+		IF qChoice$ = "1" THEN
+			qDispAppLine8$ = "Calib. 46x46..."
+			GOSUB ZDISPAPP
+			SIZE 46 mm, 46 mm
+			GOSUB ZDO_CALIB
+            GOSUB ZSAVE_FMT_1
+			qLoopCalib = 0
+		ENDIF
+		
+		IF qChoice$ = "2" THEN
+			qDispAppLine8$ = "Calib. 39x46..."
+			GOSUB ZDISPAPP
+			SIZE 39 mm, 46 mm
+			GOSUB ZDO_CALIB
+            GOSUB ZSAVE_FMT_2
+			qLoopCalib = 0
+		ENDIF
+		
+		IF qChoice$ = "3" THEN
+			qDispAppLine8$ = "Calib. 40x27..."
+			GOSUB ZDISPAPP
+			SIZE 40 mm, 27 mm
+			GOSUB ZDO_CALIB
+            GOSUB ZSAVE_FMT_3
+			qLoopCalib = 0
+		ENDIF
+	WEND
+	
+	REM Affichage message redemarrage requis
+	DISPLAY CLS
+	qDispAppLine1$ = "CALIBRAGE TERMINE"
+	qDispAppLine2$ = "Veuillez redemarrer"
+	qDispAppLine3$ = ""
+	qDispAppLine4$ = "l'imprimante"
+	qDispAppLine5$ = ""
+	qDispAppLine6$ = ""
+	qDispAppLine7$ = ""
+	qDispAppLine8$ = ""
+	qDispAppLine9$ = ""
+	GOSUB ZDISPAPP
+	
+	REM Boucle infinie pour forcer le redemarrage physique
+	qLoopRestart = 1
+	WHILE qLoopRestart = 1
+		DELAY 1000
+	WEND
+RETURN
+
+:ZSAVE_FMT_1
+    OPEN "FORMAT.DAT", 1
+    SEEK 1,0
+    WRITE 1, "1"
+    CLOSE 1
+RETURN
+
+:ZSAVE_FMT_2
+    OPEN "FORMAT.DAT", 1
+    SEEK 1,0
+    WRITE 1, "2"
+    CLOSE 1
+RETURN
+
+:ZSAVE_FMT_3
+    OPEN "FORMAT.DAT", 1
+    SEEK 1,0
+    WRITE 1, "3"
+    CLOSE 1
+RETURN
+
+:ZDO_CALIB
+	GAPDETECT
+	REM FORMFEED
 RETURN
 REM -------------------------------------------
 :ZMENUDFLT
@@ -992,7 +1127,7 @@ REM Capture Data on incoming port
 		IF ASC(qGetDataIn$) = 27 THEN
 			RUN "GESTMAG.BAS"
 		ELSEIF ASC(qGetDataIn$) = 96 THEN
-			FORMFEED
+			GOSUB ZCALIBRATE
 		ELSEIF ASC(qGetDataIn$) = 13 THEN
 			REM qDebugMsg$ = "\tIn ==> [CR]"
 			REM GOSUB ZDEBUGMSG
@@ -1167,18 +1302,47 @@ DOWNLOAD F,"1.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem1$) <> 12 THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
         CLS
-        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
-		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
-        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        TEXT qCenter, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT qCenter, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT qCenter, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
         PRINT 1
         END
     ENDIF
     IF qTphDpi$ = "203" THEN
-        REM Format 46x39mm
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
         CLS
         DIRECTION 1
-        BARCODE 187, 50, "EAN13", 100, 1, 0, 2, 1, 2, qItem1$
+        BARCODE qCenter, 50, "EAN13", 100, 1, 0, 2, 1, 2, qItem1$
         PRINT VAL(qQty$)
     ELSE
         REM Pour autres résolutions
@@ -1193,21 +1357,51 @@ DOWNLOAD F,"2.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem1$) <> 12 THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
         CLS
-        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
-		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
-        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        TEXT qCenter, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT qCenter, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT qCenter, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
         PRINT 1
         END
     ENDIF
 	IF qTphDpi$ = "203" THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
 		REM BARCODE 200,20, "EAN13",100,1,0,3,1,2, qItem1$
 		REM TEXT 200, 160, "0",0, 16, 16, 2, "PRIX: " + qItem2$ + "€"
-		BARCODE 187, 50, "EAN13", 60, 1, 0, 2, 1, 2, qItem1$
-		TEXT 187, 150, "0", 0, 12, 12, 2, "PRIX: " + qItem2$ + "€"
+		BARCODE qCenter, 50, "EAN13", 60, 1, 0, 2, 1, 2, qItem1$
+		TEXT qCenter, 150, "0", 0, 12, 12, 2, "PRIX: " + qItem2$ + "€"
 		PRINT VAL(qQty$)
 	ELSE
 		REM To work for TD-4750TNWB
@@ -1223,23 +1417,53 @@ DOWNLOAD F,"3.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem2$) <> 12 THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
         CLS
-        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
-		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
-        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        TEXT qCenter, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT qCenter, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT qCenter, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
         PRINT 1
         END
     ENDIF
 	IF qTphDpi$ = "203" THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
 		REM TEXT 200, 20, "0",0, 11, 11,2, qItem1$
 		REM BARCODE 200,50, "EAN13",80,1,0,3,1,2, qItem2$
 		REM TEXT 200, 160, "0",0, 16, 16, 2, "PRIX: " + qItem3$ + "€"
-		TEXT 187, 20, "0",0, 11, 11,2, qItem1$
-		BARCODE 187, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
-		TEXT 187, 160, "0", 0, 12, 12, 2, "PRIX: " + qItem3$ + "€"
+		TEXT qCenter, 20, "0",0, 11, 11,2, qItem1$
+		BARCODE qCenter, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
+		TEXT qCenter, 160, "0", 0, 12, 12, 2, "PRIX: " + qItem3$ + "€"
 		PRINT VAL(qQty$)
 	ELSE
 		REM To work for TD-4750TNWB
@@ -1256,19 +1480,49 @@ DOWNLOAD F,"4.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem2$) <> 12 THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
         CLS
-        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
-		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
-        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        TEXT qCenter, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT qCenter, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT qCenter, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
         PRINT 1
         END
     ENDIF
 	IF qTphDpi$ = "203" THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
-		TEXT 187, 20, "0",0, 11, 11,2, qItem1$
-		BARCODE 187, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
+		TEXT qCenter, 20, "0",0, 11, 11,2, qItem1$
+		BARCODE qCenter, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
 		REM Calcul des largeurs pour centrage et barré
 		qStr1$ = "PRIX: "
 		qStr2$ = qItem3$ + "€"
@@ -1279,7 +1533,7 @@ DOWNLOAD F,"4.BAS"
 		qW3 = TEXTPIXEL(qStr3$, "0", 12)
 		qW4 = TEXTPIXEL(qStr4$, "0", 12)
 		qTotalW = qW1 + qW2 + qW3 + qW4
-		qStartX = 180 - (qTotalW / 2)
+		qStartX = qCenter - (qTotalW / 2)
 		REM Affichage
 		TEXT qStartX, 160, "0", 0, 12, 12, 1, qStr1$
 		TEXT qStartX + qW1, 160, "0", 0, 12, 12, 1, qStr2$
@@ -1302,17 +1556,32 @@ EOP
 DOWNLOAD F,"10.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
 		REM Ancien Prix (Barre)
 		qW1 = TEXTPIXEL(qItem1$ + "€", "0", 35)
-		qStart1 = 187 - (qW1 / 2)
+		qStart1 = qCenter - (qW1 / 2)
 		TEXT qStart1, 20, "0",0, 35, 35, 1, qItem1$ + "€"
 		BAR qStart1, 45, qW1, 4
 		REM Nouveau Prix
 		qW2 = TEXTPIXEL(qItem2$ + "€", "0", 35)
-		qStart2 = 187 - (qW2 / 2)
+		qStart2 = qCenter - (qW2 / 2)
 		TEXT qStart2, 120, "0",0, 35, 35, 1, qItem2$ + "€"
 		PRINT VAL(qQty$)
 	ELSE
@@ -1328,20 +1597,35 @@ EOP
 DOWNLOAD F,"5.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
+		REM --- Gestion Format Dynamique ---
+		qWidth = 374
+		qFormat$ = "1"
+		OPEN "FORMAT.DAT", 1
+		IF LOF("FORMAT.DAT") > 0 THEN
+			SEEK 1,0
+			READ 1, qFormat$
+		ENDIF
+		CLOSE 1
+
+		IF qFormat$ = "3" THEN qWidth = 320
+		IF qFormat$ = "2" THEN qWidth = 312
+		
+		qCenter = qWidth / 2
+		REM --------------------------------
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
 		REM Ligne 1 - Centrée
 		qW1 = TEXTPIXEL(qItem1$, "0", 12)
-		qStart1 = 187 - (qW1 / 2)
+		qStart1 = qCenter - (qW1 / 2)
 		TEXT qStart1, 40, "0", 0, 12, 12, 1, qItem1$
 		REM Ligne 2 - Centrée
 		qW2 = TEXTPIXEL(qItem2$, "0", 12)
-		qStart2 = 187 - (qW2 / 2)
+		qStart2 = qCenter - (qW2 / 2)
 		TEXT qStart2, 90, "0", 0, 12, 12, 1, qItem2$
 		REM Ligne 3 - Centrée
 		qW3 = TEXTPIXEL(qItem3$, "0", 12)
-		qStart3 = 187 - (qW3 / 2)
+		qStart3 = qCenter - (qW3 / 2)
 		TEXT qStart3, 140, "0", 0, 12, 12, 1, qItem3$
 		PRINT VAL(qQty$)
 	ELSE

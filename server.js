@@ -532,10 +532,9 @@ function handlePrepareUsb(req, res) {
             // Liste des fichiers à copier
             const allFiles = fs.readdirSync(WORK_DIR);
 
-            // 1. BMP Templates (Exclure Logo et USB)
+            // 1. BMP Templates (Exclure USB)
             const bmpFiles = allFiles.filter(file =>
                 file.toLowerCase().endsWith('.bmp') &&
-                !file.startsWith('Logo_GM') &&
                 !file.toUpperCase().startsWith('USB')
             );
 
@@ -543,35 +542,50 @@ function handlePrepareUsb(req, res) {
             const sysFiles = ['AUTO.BAS', 'Prog_Gestmag.BAS', 'AUTO.TXT'];
 
             let copiedCount = 0;
+            let skippedCount = 0;
             let errors = [];
 
-            // Copie BMPs
-            bmpFiles.forEach(file => {
+            const copyIfModified = (filename) => {
+                const srcPath = path.join(WORK_DIR, filename);
+                const destPath = path.join(destRoot, filename);
+
+                if (!fs.existsSync(srcPath)) return; // Should not happen for listed files
+
                 try {
-                    fs.copyFileSync(path.join(WORK_DIR, file), path.join(destRoot, file));
-                    copiedCount++;
+                    let shouldCopy = true;
+
+                    if (fs.existsSync(destPath)) {
+                        const srcStat = fs.statSync(srcPath);
+                        const destStat = fs.statSync(destPath);
+
+                        // Copy if size differs or source is newer (allowing 2s precision diff for FAT systems)
+                        const timeDiff = srcStat.mtimeMs - destStat.mtimeMs;
+                        if (srcStat.size === destStat.size && timeDiff <= 2000) {
+                            shouldCopy = false;
+                        }
+                    }
+
+                    if (shouldCopy) {
+                        fs.copyFileSync(srcPath, destPath);
+                        copiedCount++;
+                    } else {
+                        skippedCount++;
+                    }
                 } catch (e) {
-                    errors.push(`Erreur copie ${file}: ${e.message}`);
+                    errors.push(`Erreur copie ${filename}: ${e.message}`);
                 }
-            });
+            };
+
+            // Copie BMPs
+            bmpFiles.forEach(file => copyIfModified(file));
 
             // Copie SysFiles
-            sysFiles.forEach(file => {
-                const srcPath = path.join(WORK_DIR, file);
-                if (fs.existsSync(srcPath)) {
-                    try {
-                        fs.copyFileSync(srcPath, path.join(destRoot, file));
-                        copiedCount++;
-                    } catch (e) {
-                        errors.push(`Erreur copie ${file}: ${e.message}`);
-                    }
-                }
-            });
+            sysFiles.forEach(file => copyIfModified(file));
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({
                 success: true,
-                message: `Clé USB préparée avec succès ! (${copiedCount} fichiers copiés)`,
+                message: `Clé USB mise à jour ! (${copiedCount} copiés, ${skippedCount} ignorés)`,
                 details: errors.length > 0 ? errors : null
             }));
 

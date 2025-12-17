@@ -194,6 +194,10 @@
                 max-height: 60px !important;
             }
 
+            img.printer-img {
+                max-height: 350px !important;
+            }
+
             h1 {
                 font-size: 16pt;
                 margin-bottom: 5px;
@@ -275,7 +279,8 @@
         }
 
         footer {
-            page-break-before: always;
+            page-break-before: auto;
+            page-break-inside: avoid;
             margin-top: 30px;
             padding: 15px;
             background: #f0f0f0;
@@ -321,57 +326,61 @@
                 style="max-height: 80px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
             <h1>📋 MANUEL D'UTILISATION</h1>
             <h2 style="color: white; border: none; font-size: 1.5em; margin: 5px 0;">ÉTIQUETEUSE BROTHER TD-4T</h2>
+            <img src="TD4T.png" alt="Imprimante Brother TD-4T" class="printer-img"
+                style="max-height: 150px; margin: 10px auto; display: block;">
             <!-- Branding removed -->
             <div
                 style="background: rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 4px; display: inline-block; margin: 10px 0;">
                 ✉️ <strong>contact@gest-mag.com</strong> &nbsp;|&nbsp; 🌐 <strong>www.gest-mag.com</strong>
             </div>
 
-            <div class="contacts" style="margin-top: 10px;">
-                <div class="contact-box" style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px;">
-                    <strong style="color: #ffd700;">🏭 SIÈGE BOURGES</strong><br>
-                    6 Rue des Ceps - 18390 ST GERMAIN DU PUY<br>
-                    📞 02 48 70 70 33
-                </div>
-                <div class="contact-box" style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px;">
-                    <strong>📍 ORLÉANS</strong><br>
-                    45400 FLEURY LES AUBRAIS<br>
-                    📞 02 38 88 54 87
-                </div>
-                <div class="contact-box" style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px;">
-                    <strong>📍 CLERMONT-FERRAND</strong><br>
-                    63100 CLERMONT-FD<br>
-                    📞 04 73 90 41 24
-                </div>
-                <div class="contact-box" style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px;">
-                    <strong>📍 DIJON</strong><br>
-                    21160 MARSANNAY LA COTE<br>
-                    📞 03 80 54 31 90
-                </div>
-                <div class="contact-box" style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px;">
-                    <strong>📍 AUXERRE</strong><br>
-                    89000 AUXERRE<br>
-                    📞 03 86 46 18 17
-                </div>
-            </div>
+
         </header>
 
         <h2>📐 Calage des Étiquettes</h2>
-        <div class="warning-box">
-            <strong>⚠️ Procédure de calage au démarrage :</strong>
+        <div class="info-box">
+            <strong>Procédure de calage (Changement de rouleau) :</strong>
             <ol style="margin: 10px 0 0 20px;">
-                <li><strong>Éteindre</strong> l'imprimante</li>
-                <li>Au démarrage, <strong>appuyer longtemps</strong> sur le bouton <strong>FEED</strong> (juste en
-                    dessous à droite de l'écran)</li>
-                <li><strong>Maintenir</strong> jusqu'au bip, puis <strong>relâcher</strong></li>
-                <li><strong>Redémarrer</strong> l'imprimante</li>
-                <li>Au <strong>premier lancement</strong>, lancer l'impression d'une étiquette image pour calibrer la
-                    cellule</li>
+                <li><strong>Allumer</strong> l'imprimante et attendre qu'elle soit prête</li>
+                <li>Appuyer sur la touche <strong>²</strong> (touche de fonction)</li>
+                <li>Sélectionner le format d'étiquette correspondant (1, 2 ou 3)</li>
+                <li>Attendre la fin du calibrage automatique</li>
+                <li><strong>Éteindre puis Rallumer</strong> l'imprimante lorsque le message vous y invite</li>
             </ol>
-            <p style="margin-top: 10px;"><strong>⚠️ ATTENTION :</strong> La première étiquette est automatiquement
-                décalée</p>
-            <p style="margin-top: 5px;"><strong>Note :</strong> La touche FORMFEED (touche <strong>²</strong>) ne
-                remplace PAS le calage au démarrage</p>
+        </div>
+
+        <div class="contacts-footer"
+            style="margin-top: 50px; border-top: 2px solid #667eea; padding-top: 20px; page-break-after: always; display: flex; justify-content: space-around; flex-wrap: wrap;">
+            <div class="contact-box"
+                style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px; color: black; background: #f9f9f9;">
+                <strong style="color: #667eea;">🏭 SIÈGE BOURGES</strong><br>
+                6 Rue des Ceps - 18390 ST GERMAIN DU PUY<br>
+                📞 02 48 70 70 33
+            </div>
+            <div class="contact-box"
+                style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px; color: black; background: #f9f9f9;">
+                <strong>📍 ORLÉANS</strong><br>
+                45400 FLEURY LES AUBRAIS<br>
+                📞 02 38 88 54 87
+            </div>
+            <div class="contact-box"
+                style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px; color: black; background: #f9f9f9;">
+                <strong>📍 CLERMONT-FERRAND</strong><br>
+                63100 CLERMONT-FD<br>
+                📞 04 73 90 41 24
+            </div>
+            <div class="contact-box"
+                style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px; color: black; background: #f9f9f9;">
+                <strong>📍 DIJON</strong><br>
+                21160 MARSANNAY LA COTE<br>
+                📞 03 80 54 31 90
+            </div>
+            <div class="contact-box"
+                style="padding: 8px; font-size: 0.85em; text-align: left; min-width: 200px; color: black; background: #f9f9f9;">
+                <strong>📍 AUXERRE</strong><br>
+                89000 AUXERRE<br>
+                📞 03 86 46 18 17
+            </div>
         </div>
 
         <h2>🎯 Guide d'Utilisation Rapide</h2>
@@ -440,7 +449,7 @@
             </tr>
             <tr>
                 <td><strong>²</strong> (touche)</td>
-                <td>FORMFEED - Avance papier</td>
+                <td><strong>CALIBRAGE</strong> (Démarrage / Changement rouleau) / Choix format</td>
             </tr>
         </table>
 
@@ -455,7 +464,7 @@
             </ul>
         </div>
 
-        <h2>📊 Catalogue des Templates (134 modèles disponibles)</h2>
+        <h2>📊 Catalogue des Templates (133 modèles disponibles)</h2>
 
         <div class="category">
             <h3>📦 40x27 (40x27) - 6 modèles</h3>
@@ -935,15 +944,6 @@
         </div>
 
         <div class="category">
-            <h3>📦 PRO_BACKUP (PRO_BACKUP) - 1 modèles</h3>
-            <div class="template-grid">
-                <div class="template-item">
-                    <div class="template-code">PRO09_BACKUP</div><img src="pro09_backup.bmp" alt="PRO09_BACKUP">
-                </div>
-            </div>
-        </div>
-
-        <div class="category">
             <h3>📦 RD (RD) - 4 modèles</h3>
             <div class="template-grid">
                 <div class="template-item">
@@ -977,7 +977,7 @@
             <div class="info-box" style="text-align: center; margin-top: 40px; color: #666;">
                 <p>Document généré automatiquement le 17 décembre 2025</p>
                 <!-- Branding removed -->
-                <p>134 modèles indexés (Images système exclues)</p>
+                <p>133 modèles indexés (Images système exclues)</p>
                 <p style="margin-top: 10px; font-size: 0.9em;">Développé par Clément CAHAGNE</p>
             </div>
         </footer>

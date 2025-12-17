@@ -7,6 +7,27 @@
     <title>Gestionnaire de Templates d'Images</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="template_manager.css">
+    <style>
+        .btn-info {
+            background-color: var(--primary-color, #667eea);
+            color: white;
+            border: none;
+        }
+
+        .btn-info:hover {
+            filter: brightness(1.1);
+        }
+
+        /* Modal specific styles */
+        #initModal .modal-body ol {
+            padding-left: 20px;
+        }
+
+        #initModal .modal-body li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -37,6 +58,13 @@
                 </div>
             </div>
             <div class="header-actions">
+                <button class="btn btn-info" onclick="openInitModal()"
+                    title="Procédure d'initialisation pour préparateur">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z"></path>
+                    </svg>
+                    Procédure Préparateur
+                </button>
                 <button class="btn btn-usb" onclick="promptUsbKey()" title="Copier les fichiers sur une clé USB">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 7h16" />
@@ -259,11 +287,77 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <!-- Modal Procédure Initialisation -->
+    <div class="modal" id="initModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>🛠️ Procédure d'Initialisation (Préparateur)</h3>
+                <button class="modal-close" onclick="closeInitModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Initialiser l'imprimante</strong> (Reset usine si nécessaire).</li>
+                    <li>Mettre l'imprimante en <strong>Français</strong>.</li>
+                    <li><em>(Étape système interne)</em></li>
+                    <li><strong>Éteindre</strong> l'imprimante.</li>
+                    <li>Insérer la clé USB préparée avec ce logiciel et suivre les étapes à l'écran.</li>
+                    <li>Au <strong>premier démarrage</strong>, lancer la calibration avec la touche <strong>²</strong>
+                        du clavier.</li>
+                    <li><strong>Imprimer le premier template image</strong> (il sera décalé, c'est normal).</li>
+                </ol>
+                <div class="info-box"
+                    style="margin-top: 20px; background: #e3f2fd; color: #0d47a1; padding: 10px; border-radius: 5px;">
+                    <strong>Note :</strong> Cette procédure doit être suivie à chaque mise en service d'une nouvelle
+                    imprimante.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeInitModal()">Compris</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Toast notifications -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script src="template_manager.js"></script>
+    <script>
+        // Gestion de la modale d'initialisation
+        function openInitModal() {
+            const modal = document.getElementById('initModal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+
+        function closeInitModal() {
+            const modal = document.getElementById('initModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // Fermeture en cliquant en dehors
+        window.onclick = function (event) {
+            const initModal = document.getElementById('initModal');
+            if (event.target == initModal) {
+                closeInitModal();
+            }
+            // Conserver la gestion de l'autre modale si elle est gérée globalement
+            const confirmModal = document.getElementById('confirmModal');
+            if (event.target == confirmModal) {
+                // closeConfirmModal(); // Assuming exists in JS
+                confirmModal.classList.remove('active');
+            }
+        }
+    </script>
 </body>
 
 </html>

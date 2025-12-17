@@ -201,7 +201,9 @@ DISPLAY CLS
 
 
 
-
+SOUND 1,200
+SOUND 2,200
+SOUND 3,200
 DISPLAY CLS
 DISPLAY 55, 110, "0", 0, 8, 8, 2, "Installation Terminee !"
 DISPLAY 75, 140, "0", 0, 6, 6, 2, "Retirer Cle + OFF/ON"
