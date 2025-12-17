@@ -1,6 +1,7 @@
 REM ************************************
 REM     Application Name: GESTMAG 46x46
 REM     Version: 20251117-001
+REM     Developer: Clement CAHAGNE
 REM ************************************
 REM     Brother Base Printing Project
 REM ************************************
@@ -537,6 +538,16 @@ REM _________________________________
 			IF qLibelStp = 3 THEN
 				REM Add extra line to show user which field to enter
 				DISPLAY (qXPos + 70), (qYPos + 80), 100, 2, 2
+			ENDIF
+			qDispColor$ = "Grey"
+			GOSUB ZDISPCOLOR
+			DISPLAY (qXPos), (qYPos + 90), "0", 0, qFntS, qFntS, 2, qDispAppLine8$
+			qDispColor$ = "Blue"
+			GOSUB ZDISPCOLOR
+			DISPLAY (qXPos + 70), (qYPos + 90), "0", 0, qFntS, qFntS, 2, qDispAppLine9$
+			IF qLibelStp = 4 THEN
+				REM Add extra line to show user which field to enter
+				DISPLAY (qXPos + 70), (qYPos + 110), 100, 2, 2
 			ENDIF
 			qDispColor$ = "Black"
 			GOSUB ZDISPCOLOR
@@ -1151,12 +1162,9 @@ DOWNLOAD F,"RD1.BAS"
         REM Pour autres résolutions
     ENDIF
 EOP
-
-
 ### TEMPLATE POUR ETIQUETTE 40x27 blanche
 DOWNLOAD F,"1.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem1$) <> 12 THEN
         CLS
@@ -1166,7 +1174,6 @@ DOWNLOAD F,"1.BAS"
         PRINT 1
         END
     ENDIF
-    
     IF qTphDpi$ = "203" THEN
         REM Format 46x39mm
         CLS
@@ -1177,16 +1184,13 @@ DOWNLOAD F,"1.BAS"
         REM Pour autres résolutions
     ENDIF
 EOP
-
 DOWNLOAD F,"1.INI"
 REM - Init file for Template
 Menu = 1
 Item_1 = CAB
 EOP
-
 DOWNLOAD F,"2.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem1$) <> 12 THEN
         CLS
@@ -1196,8 +1200,6 @@ DOWNLOAD F,"2.BAS"
         PRINT 1
         END
     ENDIF
-	
-	
 	IF qTphDpi$ = "203" THEN
 		REM Ok for TD-4650TNWB
 		CLS
@@ -1211,17 +1213,14 @@ DOWNLOAD F,"2.BAS"
 		REM To work for TD-4750TNWB
 	ENDIF
 EOP
-
 DOWNLOAD F,"2.INI"
 REM - Init file for Template
 Menu = 2
 Item_1 = CAB
 Item_2 = Prix
 EOP
-
 DOWNLOAD F,"3.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem2$) <> 12 THEN
         CLS
@@ -1231,7 +1230,6 @@ DOWNLOAD F,"3.BAS"
         PRINT 1
         END
     ENDIF
-	
 	IF qTphDpi$ = "203" THEN
 		REM Ok for TD-4650TNWB
 		CLS
@@ -1247,7 +1245,6 @@ DOWNLOAD F,"3.BAS"
 		REM To work for TD-4750TNWB
 	ENDIF
 EOP
-
 DOWNLOAD F,"3.INI"
 REM - Init file for Template
 Menu = 3
@@ -1255,10 +1252,8 @@ Item_1 = Libelle
 Item_2 = CAB
 Item_3 = Prix
 EOP
-
 DOWNLOAD F,"4.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	
 	REM Vérification que le code EAN a bien 12 caractères
     IF LEN(qItem2$) <> 12 THEN
         CLS
@@ -1268,41 +1263,34 @@ DOWNLOAD F,"4.BAS"
         PRINT 1
         END
     ENDIF
-	
 	IF qTphDpi$ = "203" THEN
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
 		TEXT 187, 20, "0",0, 11, 11,2, qItem1$
 		BARCODE 187, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
-		
 		REM Calcul des largeurs pour centrage et barré
 		qStr1$ = "PRIX: "
 		qStr2$ = qItem3$ + "€"
 		qStr3$ = " / "
 		qStr4$ = qItem4$ + "€"
-		
 		qW1 = TEXTPIXEL(qStr1$, "0", 12)
 		qW2 = TEXTPIXEL(qStr2$, "0", 12)
 		qW3 = TEXTPIXEL(qStr3$, "0", 12)
 		qW4 = TEXTPIXEL(qStr4$, "0", 12)
-		
 		qTotalW = qW1 + qW2 + qW3 + qW4
 		qStartX = 180 - (qTotalW / 2)
-		
 		REM Affichage
 		TEXT qStartX, 160, "0", 0, 12, 12, 1, qStr1$
 		TEXT qStartX + qW1, 160, "0", 0, 12, 12, 1, qStr2$
 		BAR qStartX + qW1, 170, qW2, 2
 		TEXT qStartX + qW1 + qW2, 160, "0", 0, 12, 12, 1, qStr3$
 		TEXT qStartX + qW1 + qW2 + qW3, 160, "0", 0, 12, 12, 1, qStr4$
-		
 		PRINT VAL(qQty$)
 	ELSE
 		REM To work for TD-4750TNWB
 	ENDIF
 EOP
-
 DOWNLOAD F,"4.INI"
 REM - Init file for Template
 Menu = 4
@@ -1311,10 +1299,8 @@ Item_2 = CAB
 Item_3 = Ancien
 Item_4 = Nouveau
 EOP
-
 DOWNLOAD F,"10.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	
 	IF qTphDpi$ = "203" THEN
 		REM Ok for TD-4650TNWB
 		CLS
@@ -1324,54 +1310,44 @@ DOWNLOAD F,"10.BAS"
 		qStart1 = 187 - (qW1 / 2)
 		TEXT qStart1, 20, "0",0, 35, 35, 1, qItem1$ + "€"
 		BAR qStart1, 45, qW1, 4
-		
 		REM Nouveau Prix
 		qW2 = TEXTPIXEL(qItem2$ + "€", "0", 35)
 		qStart2 = 187 - (qW2 / 2)
 		TEXT qStart2, 120, "0",0, 35, 35, 1, qItem2$ + "€"
-		
 		PRINT VAL(qQty$)
 	ELSE
 		REM To work for TD-4750TNWB
 	ENDIF
 EOP
-
 DOWNLOAD F,"10.INI"
 REM - Init file for Template
 Menu = 2
 Item_1 = Ancien
 Item_2 = Nouveau
 EOP
-
 DOWNLOAD F,"5.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	
 	IF qTphDpi$ = "203" THEN
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
-		
 		REM Ligne 1 - Centrée
 		qW1 = TEXTPIXEL(qItem1$, "0", 12)
 		qStart1 = 187 - (qW1 / 2)
 		TEXT qStart1, 40, "0", 0, 12, 12, 1, qItem1$
-		
 		REM Ligne 2 - Centrée
 		qW2 = TEXTPIXEL(qItem2$, "0", 12)
 		qStart2 = 187 - (qW2 / 2)
 		TEXT qStart2, 90, "0", 0, 12, 12, 1, qItem2$
-		
 		REM Ligne 3 - Centrée
 		qW3 = TEXTPIXEL(qItem3$, "0", 12)
 		qStart3 = 187 - (qW3 / 2)
 		TEXT qStart3, 140, "0", 0, 12, 12, 1, qItem3$
-		
 		PRINT VAL(qQty$)
 	ELSE
 		REM To work for TD-4750TNWB
 	ENDIF
 EOP
-
 DOWNLOAD F,"5.INI"
 REM - Init file for Template
 Menu = 3
@@ -1379,11 +1355,7 @@ Item_1 = Ligne 1
 Item_2 = Ligne 2
 Item_3 = Ligne 3
 EOP
-
-
 ### FIN TEMPLATE POUR ETIQUETTE 40x27 blanche
-
-
 DOWNLOAD F,"RD1.INI"
 REM - Init file for Template
 Menu = 1
@@ -1454,7 +1426,7 @@ qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 		CLS
 		DIRECTION 1
 		qW1 = TEXTPIXEL(qItem1$ + "€", "0", 72)
-		qStart = 160 - (qW1 / 2)
+		qStart = 187 - (qW1 / 2)
 		TEXT qStart, 75, "0",0, 72, 72, 1, qItem1$ + "€"
 		PRINT VAL(qQty$)
 	ELSE
@@ -1497,11 +1469,11 @@ DOWNLOAD F,"PRI01.BAS"
         REM - 46mm à 203 DPI = environ 360 pixels
         REM Centre sur l'axe principal
         REM Ajustement manuel : 240 était trop à gauche, on tente 260
-        qCenter = 260
+        qCenter = 187
         qXPos = qCenter - (qTextWidth / 2)
         REM Position Y (reste identique sur la hauteur)
         qYPos = 110
-        TEXT qXPos, qYPos, "0", 0, 30, 30, 2, qPrixText$
+        TEXT qXPos, qYPos, "0", 0, 30, 30, 1, qPrixText$
         PRINT VAL(qQty$)
     ELSE
         REM To work for TD-4750TNWB
@@ -1521,11 +1493,11 @@ DOWNLOAD F,"PRI02.BAS"
 		REM Ok for TD-4650TNWB
 		CLS
 		DIRECTION 1
-		qW1 = TEXTPIXEL(qPrixLeft$, "0", 60)
-		qW2 = TEXTPIXEL("€" + qPrixRight$, "0", 40)
-		qStart = 160 - ((qW1 + qW2) / 2)
-		TEXT qStart, 100, "0",0, 60, 60, 1, qPrixLeft$
-		TEXT qStart + qW1, 100, "0",0, 40, 40, 1,  "€" + qPrixRight$
+		qW1 = TEXTPIXEL(qPrixLeft$, "0", 50)
+		qW2 = TEXTPIXEL("€" + qPrixRight$, "0", 30)
+		qStart = 187 - ((qW1 + qW2) / 2)
+		TEXT qStart, 100, "0",0, 50, 50, 1, qPrixLeft$
+		TEXT qStart + qW1, 100, "0",0, 30, 30, 1,  "€" + qPrixRight$
 		PRINT VAL(qQty$)
 	ELSE
 		REM To work for TD-4750TNWB
@@ -1710,33 +1682,51 @@ Menu = 2
 Item_1 = Prix
 Item_2 = CAB
 EOP
-
 DOWNLOAD F,"DLC03.BAS"
     qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
     IF qTphDpi$ = "203" THEN
         REM Ok for TD-4650TNWB
         CLS
         DIRECTION 1
-        
         REM Titre "DLC COURTE"
         qW1 = TEXTPIXEL("DLC COURTE", "0", 12)
         qStart1 = 187 - (qW1 / 2)
         TEXT qStart1, 25, "0",0, 12, 12, 1, "DLC COURTE"
-
-        REM Ancien Prix (Barre)
-        qW2 = TEXTPIXEL(qItem1$ + "€", "0", 15)
-        qStart2 = 187 - (qW2 / 2)
-        TEXT qStart2, 60, "0",0, 15, 15, 1, qItem1$ + "€"
-        BAR qStart2, 80, qW2, 3
-        
+        REM Libelle
+        qWLib = TEXTPIXEL(qItem1$, "0", 12)
+        qStartLib = 187 - (qWLib / 2)
+        TEXT qStartLib, 60, "0",0, 12, 12, 1, qItem1$
+        REM Formatage Ancien Prix (qItem2)
+        IF INSTR(qItem2$, ".") = 0 THEN
+            qItem2$ = qItem2$ + ".00"
+        ELSE
+            IF LEN(qItem2$) - INSTR(qItem2$, ".") = 1 THEN
+                qItem2$ = qItem2$ + "0"
+            ENDIF
+        ENDIF
+        REM Formatage Nouveau Prix (qItem3)
+        IF INSTR(qItem3$, ".") = 0 THEN
+            qItem3$ = qItem3$ + ".00"
+        ELSE
+            IF LEN(qItem3$) - INSTR(qItem3$, ".") = 1 THEN
+                qItem3$ = qItem3$ + "0"
+            ENDIF
+        ENDIF
+        REM Prix sur la meme ligne (Old + New)
+        qStrOld$ = qItem2$ + "€"
+        qStrNew$ = qItem3$ + "€"
+        qWOld = TEXTPIXEL(qStrOld$, "0", 15)
+        qWNew = TEXTPIXEL(qStrNew$, "0", 25)
+        qSpace = 15
+        qTotalW = qWOld + qSpace + qWNew
+        qXStart = 187 - (qTotalW / 2)
+        REM Ancien Prix (Decale pour centrage vertical approx avec le prix 25)
+        TEXT qXStart, 115, "0",0, 15, 15, 1, qStrOld$
+        BAR qXStart, 130, qWOld, 2
         REM Nouveau Prix
-        qW3 = TEXTPIXEL(qItem2$ + "€", "0", 25)
-        qStart3 = 187 - (qW3 / 2)
-        TEXT qStart3, 110, "0",0, 25, 25, 1, qItem2$ + "€"
-
+        TEXT qXStart + qWOld + qSpace, 110, "0",0, 25, 25, 1, qStrNew$
         REM Barcode
-        BARCODE 187,175, "EAN13",60, 1, 0, 2, 1, 2, qItem3$
-        
+        BARCODE 187,175, "EAN13",60, 1, 0, 2, 1, 2, qItem4$
         PRINT VAL(qQty$)
     ELSE
         REM To work for TD-4750TNWB
@@ -1744,10 +1734,11 @@ DOWNLOAD F,"DLC03.BAS"
 EOP
 DOWNLOAD F,"DLC03.INI"
 REM - Init file for Template
-Menu = 3
-Item_1 = Ancien
-Item_2 = Nouveau
-Item_3 = CAB
+Menu = 4
+Item_1 = Libelle
+Item_2 = Ancien
+Item_3 = Nouveau
+Item_4 = CAB
 EOP
 DOWNLOAD F,"DLC01.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
@@ -2096,38 +2087,6 @@ EOP
 DOWNLOAD F,"PRO70.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"PRO08.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        REM Configuration pour 203 DPI - Format 46x46mm
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 10, 20, "pro08.bmp", 1 
-        PRINT VAL(qQty$)
-    ELSE
-        REM Configuration pour autres résolutions si nécessaire
-	ENDIF
-EOP
-DOWNLOAD F,"PRO08.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"PRO09.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        REM Configuration pour 203 DPI - Format 46x46mm
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "pro09.bmp", 1 
-        PRINT VAL(qQty$)
-    ELSE
-        REM Configuration pour autres résolutions si nécessaire
-	ENDIF
-EOP
-DOWNLOAD F,"PRO09.INI"
-REM - Init file for Template
-EOP
 DOWNLOAD F,"PRO11.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -2341,70 +2300,6 @@ EOP
 DOWNLOAD F,"PRO14.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"MAI01.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        REM Configuration pour 203 DPI - Format 46x46mm
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mai01.bmp", 1 
-        PRINT VAL(qQty$)
-    ELSE
-        REM Configuration pour autres résolutions si nécessaire
-	ENDIF
-EOP
-DOWNLOAD F,"MAI01.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAI02.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        REM Configuration pour 203 DPI - Format 46x46mm
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mai02.bmp", 1 
-        PRINT VAL(qQty$)
-    ELSE
-        REM Configuration pour autres résolutions si nécessaire
-	ENDIF
-EOP
-DOWNLOAD F,"MAI02.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAI03.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        REM Configuration pour 203 DPI - Format 46x46mm
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mai03.bmp", 1 
-        PRINT VAL(qQty$)
-    ELSE
-        REM Configuration pour autres résolutions si nécessaire
-	ENDIF
-EOP
-DOWNLOAD F,"MAI03.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAI04.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        REM Configuration pour 203 DPI - Format 46x46mm
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mai04.bmp", 1 
-        PRINT VAL(qQty$)
-    ELSE
-        REM Configuration pour autres résolutions si nécessaire
-	ENDIF
-EOP
-DOWNLOAD F,"MAI04.INI"
-REM - Init file for Template
-EOP
 DOWNLOAD F,"BOU11.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -2469,13 +2364,11 @@ EOP
 DOWNLOAD F,"BOU30.INI"
 REM - Init file for Template
 EOP
-
         PRINT VAL(qQty$)
     ELSE
         REM Configuration pour autres résolutions si nécessaire
 	ENDIF
 EOP
-
 DOWNLOAD F,"PRE01.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -2671,84 +2564,6 @@ EOP
 DOWNLOAD F,"PRE15.INI"
 REM - Init file for Template
 EOP
-DOWNLOAD F,"COM01.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "com01.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"COM01.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"COM02.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "com02.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"COM02.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"COM03.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "com03.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"COM03.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"COM04.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "com04.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"COM04.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"COM05.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "com05.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"COM05.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"COM06.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "com06.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"COM06.INI"
-REM - Init file for Template
-EOP
 DOWNLOAD F,"ORI01.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -2773,240 +2588,6 @@ DOWNLOAD F,"ORI02.BAS"
     ENDIF
 EOP
 DOWNLOAD F,"ORI02.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR01.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar01.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR01.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR02.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar02.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR02.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR03.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar03.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR03.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR04.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar04.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR04.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR05.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar05.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR05.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR06.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar06.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR06.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR07.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar07.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR07.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR08.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar08.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR08.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"MAR09.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "mar09.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"MAR09.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET01.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet01.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET01.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET02.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet02.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET02.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET03.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet03.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET03.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET04.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet04.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET04.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET05.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet05.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET05.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET06.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet06.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET06.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET07.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet07.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET07.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET08.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet08.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET08.INI"
-REM - Init file for Template
-EOP
-DOWNLOAD F,"FET09.BAS"
-	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
-	IF qTphDpi$ = "203" THEN
-        SIZE 46 mm, 46 mm  
-        DIRECTION 1
-        CLS
-        PUTBMP 22, 22, "fet09.bmp", 1 
-        PRINT VAL(qQty$)
-    ENDIF
-EOP
-DOWNLOAD F,"FET09.INI"
 REM - Init file for Template
 EOP
 DOWNLOAD F,"PIZ01.BAS"
@@ -3243,7 +2824,6 @@ EOP
 DOWNLOAD F,"PIZ04.INI"
 REM - CROPTOP = 0
 EOP
-
 DOWNLOAD F,"ABA02.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -3348,7 +2928,6 @@ EOP
 DOWNLOAD F,"AMO06.INI"
 REM - CROPTOP = 10
 EOP
-
 DOWNLOAD F,"BOU07.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -3427,7 +3006,6 @@ EOP
 DOWNLOAD F,"BOU03.INI"
 REM - CROPTOP = 55
 EOP
-
 DOWNLOAD F,"BOU08.BAS"
 	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
 	IF qTphDpi$ = "203" THEN
@@ -3519,12 +3097,435 @@ EOP
 DOWNLOAD F,"BAR03.INI"
 REM - CROPTOP = 10
 EOP
-
-
-
-
-
-
+DOWNLOAD F,"COM01.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "com01.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"COM01.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"COM02.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "com02.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"COM02.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"COM03.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "com03.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"COM03.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"COM04.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "com04.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"COM04.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"COM05.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "com05.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"COM05.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"COM06.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "com06.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"COM06.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FRA01.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "fra01.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FRA01.INI"
+REM - CROPTOP = 30
+EOP
+DOWNLOAD F,"FRA02.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "fra02.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FRA02.INI"
+REM - CROPTOP = 10
+EOP
+DOWNLOAD F,"FRA03.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "fra03.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FRA03.INI"
+REM - CROPTOP = 20
+EOP
+DOWNLOAD F,"FET01.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet01.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET01.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET02.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet02.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET02.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET03.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet03.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET03.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET04.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet04.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET04.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET05.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet05.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET05.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET06.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet06.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET06.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET07.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet07.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET07.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET08.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet08.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET08.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"FET09.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "fet09.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"FET09.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"MAI01.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "mai01.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAI01.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"MAI02.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "mai02.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAI02.INI"
+REM - CROPTOP = 20
+EOP
+DOWNLOAD F,"MAI03.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "mai03.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAI03.INI"
+REM - CROPTOP = 10
+EOP
+DOWNLOAD F,"MAI04.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "mai04.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAI04.INI"
+REM - CROPTOP = 10
+EOP
+DOWNLOAD F,"MAR01.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "mar01.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR01.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"MAR02.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 20, 22, "mar02.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR02.INI"
+REM - CROPTOP = 10
+EOP
+DOWNLOAD F,"MAR03.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 20, 22, "mar03.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR03.INI"
+REM - CROPTOP = 10
+EOP
+DOWNLOAD F,"MAR04.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 20, 22, "mar04.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR04.INI"
+REM - CROPTOP = 10
+EOP
+DOWNLOAD F,"MAR05.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "mar05.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR05.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"MAR06.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "mar06.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR06.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"MAR07.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "mar07.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR07.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"MAR09.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 8, 22, "mar09.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR09.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"MAR08.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "mar08.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"MAR08.INI"
+REM - CROPTOP = 0
+EOP
+DOWNLOAD F,"PRO08.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "pro08.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"PRO08.INI"
+REM - CROPTOP = 20
+EOP
+DOWNLOAD F,"PRO09.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	IF qTphDpi$ = "203" THEN
+        SIZE 46 mm, 46 mm
+        DIRECTION 1
+        CLS
+        PUTBMP 22, 22, "pro09.bmp", 1
+        PRINT VAL(qQty$)
+    ENDIF
+EOP
+DOWNLOAD F,"PRO09.INI"
+REM - CROPTOP = 0
+EOP
 
 
 RUN "GESTMAG.BAS"

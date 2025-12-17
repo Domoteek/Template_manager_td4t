@@ -31,6 +31,7 @@ const CATEGORY_MAPPINGS = {
     'ORI': 'ORIGINE',
     'PIZ': 'PIZZA',
     'PRE': 'PREPARATION',
+    'PRI': 'PRIX',
     'PR': 'PROMO',
     'PRO': 'PROMO',
     'VIA': 'VIA'
@@ -463,8 +464,9 @@ function handleGenerateManual(req, res) {
             newContent += `        <footer>
             <div class="info-box" style="text-align: center; margin-top: 40px; color: #666;">
                 <p>Document généré automatiquement le ${currentDate}</p>
-                <p>Système de gestion de templates Brother TD-4T - Version 2.0</p>
+                <!-- Branding removed -->
                 <p>${totalTemplates} modèles indexés (Images système exclues)</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">Développé par Clément CAHAGNE</p>
             </div>
         </footer>
     </div>

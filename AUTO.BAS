@@ -109,7 +109,6 @@ REM -----
 	COPY E,"mar05.bmp" ,F,"mar05.bmp"
 	COPY E,"mar06.bmp" ,F,"mar06.bmp"
 	COPY E,"mar07.bmp" ,F,"mar07.bmp"
-	COPY E,"mar08.bmp" ,F,"mar08.bmp"
 	COPY E,"mar09.bmp" ,F,"mar09.bmp"
 
 	DISPLAY CLS
@@ -189,10 +188,14 @@ DISPLAY CLS
 	COPY E,"amo06.bmp" ,F,"amo06.bmp"
 	COPY E,"bou08.bmp" ,F,"bou08.bmp"
 	COPY E,"dlc03.bmp" ,F,"dlc03.bmp"
-	COPY E,"dlc04.bmp" ,F,"dlc04.bmp"
-	COPY E,"dlc05.bmp" ,F,"dlc05.bmp"
-	COPY E,"dlc06.bmp" ,F,"dlc06.bmp"
-	COPY E,"dlc07.bmp" ,F,"dlc07.bmp"
+	COPY E,"fra01.bmp" ,F,"fra01.bmp"
+	COPY E,"fra02.bmp" ,F,"fra02.bmp"
+	COPY E,"fra03.bmp" ,F,"fra03.bmp"
+	COPY E,"mai01.bmp" ,F,"mai01.bmp"
+	COPY E,"mai02.bmp" ,F,"mai02.bmp"
+	COPY E,"mai03.bmp" ,F,"mai03.bmp"
+	COPY E,"mai04.bmp" ,F,"mai04.bmp"
+	COPY E,"mar08.bmp" ,F,"mar08.bmp"
 
 
 

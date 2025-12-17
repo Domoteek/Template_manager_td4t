@@ -82,21 +82,24 @@
                             <div class="form-row">
                                 <div class="form-group half">
                                     <label for="templateCategory">Catégorie *</label>
-                                    <select id="templateCategory" name="templateCategory" required>
-                                        <option value="">Sélectionnez...</option>
-                                        <option value="ABAT">ABAT</option>
-                                        <option value="Amour">Amour</option>
-                                        <option value="BARBECUE">BARBECUE</option>
-                                        <option value="Boucherie">Boucherie</option>
-                                        <option value="Composition">Composition</option>
-                                        <option value="Fêtes">Fêtes</option>
-                                        <option value="Fraîche Découpe">Fraîche Découpe</option>
-                                        <option value="MAREE">MAREE</option>
-                                        <option value="Origine">Origine</option>
-                                        <option value="Pizza">Pizza</option>
-                                        <option value="PREPARATION">PREPARATION</option>
-                                        <option value="Promo">Promo</option>
-                                    </select>
+                                    <input type="text" id="templateCategory" name="templateCategory" list="categoryList"
+                                        placeholder="Sélectionner ou créer..." required autocomplete="off">
+                                    <datalist id="categoryList">
+                                        <!-- Populated by JS -->
+                                        <option value="ABAT">
+                                        <option value="Amour">
+                                        <option value="BARBECUE">
+                                        <option value="Boucherie">
+                                        <option value="Composition">
+                                        <option value="Fêtes">
+                                        <option value="Fraîche Découpe">
+                                        <option value="MAREE">
+                                        <option value="Origine">
+                                        <option value="Pizza">
+                                        <option value="PREPARATION">
+                                        <option value="PRIX">
+                                        <option value="Promo">
+                                    </datalist>
                                 </div>
                                 <div class="form-group half">
                                     <label for="templateCode">Code *</label>
@@ -228,6 +231,10 @@
                 </div>
             </section>
         </main>
+        <footer
+            style="text-align: center; padding: 20px; color: var(--text-tertiary); font-size: 0.85rem; opacity: 0.7;">
+            <p>Développé par Clément CAHAGNE</p>
+        </footer>
     </div>
 
     <!-- Modal de confirmation -->

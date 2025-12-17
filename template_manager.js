@@ -1,4 +1,5 @@
 // Template Manager - JavaScript
+// Développé par Clément CAHAGNE
 class TemplateManager {
     constructor() {
         this.templates = this.loadTemplates();
@@ -274,6 +275,9 @@ class TemplateManager {
 
                 this.saveTemplates();
 
+                this.populateCategoryFilter();
+                this.populateFormCategoryDropdown();
+
                 // Get current filter values before rendering (capture at response time)
                 const searchQuery = document.getElementById('searchInput').value;
                 const category = document.getElementById('categoryFilter').value;
@@ -543,28 +547,20 @@ class TemplateManager {
     }
 
     populateFormCategoryDropdown() {
-        const formSelect = document.getElementById('templateCategory');
-        if (!formSelect) return;
-
-        // Sauvegarder la sélection actuelle
-        const currentSelection = formSelect.value;
+        const dataList = document.getElementById('categoryList');
+        if (!dataList) return;
 
         // Extraire les catégories uniques
         const categories = [...new Set(this.templates.map(t => t.category).filter(Boolean))].sort();
 
-        // Vider (garder le placeholder)
-        formSelect.innerHTML = '<option value="">Sélectionnez...</option>';
+        // Vider
+        dataList.innerHTML = '';
 
         categories.forEach(cat => {
             const option = document.createElement('option');
             option.value = cat;
-            option.textContent = cat;
-            formSelect.appendChild(option);
+            dataList.appendChild(option);
         });
-
-        if (currentSelection && categories.includes(currentSelection)) {
-            formSelect.value = currentSelection;
-        }
     }
 
     renderTemplates(filter = '', category = '') {
@@ -606,7 +602,12 @@ class TemplateManager {
             const categoryBadge = template.category ? `<span class="category-badge">${template.category}</span>` : '';
 
             // Protected templates (Text/Barcode) that should not be edited via this interface
-            const PROTECTED_CODES = ['1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'V0'];
+            const PROTECTED_CODES = [
+                '1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'V0',
+                'PRO01', 'PRO02', 'PRO03', 'PRO04', 'PRO06', 'PRO07', 'PRO11', 'PRO12', 'PRO13', 'PRO45', 'PRO55',
+                'TXT01', 'TXT03',
+                'PRI04', 'PRI05', 'PRI07'
+            ];
             const isProtected = PROTECTED_CODES.includes(template.code);
 
             const editButton = isProtected
