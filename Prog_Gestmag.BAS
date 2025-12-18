@@ -1703,6 +1703,56 @@ Item_1 = Libelle
 Item_2 = CAB
 Item_3 = Prix
 EOP
+
+DOWNLOAD F,"RD4.BAS"
+	qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")
+	REM Vérification que le code EAN a bien 12 caractères
+    IF LEN(qItem2$) <> 12 THEN
+		REM --------------------------------
+        CLS
+        TEXT 187, 50, "0",0, 12, 12, 2, "CODE EAN INVALIDE"
+		TEXT 187, 80, "0",0, 12, 12, 2, "DOIT AVOIR"
+        TEXT 187, 110, "0",0, 12, 12, 2, "12 CHIFFRES"
+        PRINT 1
+        END
+    ENDIF
+	IF qTphDpi$ = "203" THEN
+		REM Ok for TD-4650TNWB
+		CLS
+		DIRECTION 1
+		TEXT 187, 20, "0",0, 11, 11,2, qItem1$
+		BARCODE 187, 60, "EAN13", 60, 1, 0, 2, 1, 2, qItem2$
+		REM Calcul des largeurs pour centrage et barré
+		qStr1$ = "PRIX: "
+		qStr2$ = qItem3$ + "€"
+		qStr3$ = " / "
+		qStr4$ = qItem4$ + "€"
+		qW1 = TEXTPIXEL(qStr1$, "0", 12)
+		qW2 = TEXTPIXEL(qStr2$, "0", 12)
+		qW3 = TEXTPIXEL(qStr3$, "0", 12)
+		qW4 = TEXTPIXEL(qStr4$, "0", 12)
+		qTotalW = qW1 + qW2 + qW3 + qW4
+		qStartX = 187 - (qTotalW / 2)
+		REM Affichage
+		TEXT qStartX, 160, "0", 0, 12, 12, 1, qStr1$
+		TEXT qStartX + qW1, 160, "0", 0, 12, 12, 1, qStr2$
+		BAR qStartX + qW1, 170, qW2, 2
+		TEXT qStartX + qW1 + qW2, 160, "0", 0, 12, 12, 1, qStr3$
+		TEXT qStartX + qW1 + qW2 + qW3, 160, "0", 0, 12, 12, 1, qStr4$
+		PRINT VAL(qQty$)
+	ELSE
+		REM To work for TD-4750TNWB
+	ENDIF
+EOP
+DOWNLOAD F,"RD4.INI"
+REM - Init file for Template
+Menu = 4
+Item_1 = Libelle
+Item_2 = CAB
+Item_3 = Ancien
+Item_4 = Nouveau
+EOP
+
 REM ---------------- FORMAT ROND de 1€ a 9 € ---------------------
 DOWNLOAD F,"PRI0.BAS"
 qTphDpi$ = GETSETTING$("SYSTEM","INFORMATION","DPI")

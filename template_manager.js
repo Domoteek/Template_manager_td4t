@@ -299,7 +299,7 @@ class TemplateManager {
         if (!template) return;
 
         // Protected check
-        const PROTECTED_CODES = ['1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'V0'];
+        const PROTECTED_CODES = ['1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'PRI02', 'V0'];
         if (PROTECTED_CODES.includes(template.code)) {
             this.showToast('Ce template (Texte/CodeBarre) ne peut pas être modifié ici.', 'error');
             return;
@@ -606,7 +606,7 @@ class TemplateManager {
                 '1', '2', '3', '4', '5', '10', 'RD1', 'RD2', 'RD3', 'RD4', 'PRI0', 'PRI01', 'V0',
                 'PRO01', 'PRO02', 'PRO03', 'PRO04', 'PRO06', 'PRO07', 'PRO11', 'PRO12', 'PRO13', 'PRO45', 'PRO55',
                 'TXT01', 'TXT03',
-                'PRI04', 'PRI05', 'PRI07'
+                'PRI04', 'PRI05', 'PRI07', 'PRI02'
             ];
             const isProtected = PROTECTED_CODES.includes(template.code);
 

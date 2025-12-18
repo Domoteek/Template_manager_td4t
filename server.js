@@ -4,7 +4,7 @@ const path = require('path');
 const url = require('url');
 
 const PORT = 3000;
-const WORK_DIR = __dirname; // Current directory
+const WORK_DIR = process.pkg ? path.dirname(process.execPath) : __dirname; // Current directory (compatible with exe)
 
 const MIME_TYPES = {
     '.html': 'text/html',
