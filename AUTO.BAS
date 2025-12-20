@@ -196,6 +196,7 @@ DISPLAY CLS
 	COPY E,"mai03.bmp" ,F,"mai03.bmp"
 	COPY E,"mai04.bmp" ,F,"mai04.bmp"
 	COPY E,"mar08.bmp" ,F,"mar08.bmp"
+	COPY E,"aba04.bmp" ,F,"aba04.bmp"
 
 
 
