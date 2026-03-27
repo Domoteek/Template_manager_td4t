@@ -1149,138 +1149,50 @@ REM Capture Data on incoming port
 				REM qDebugMsg$ = "\tIn ==> [" + qGetDataIn$ + "] (" + STR$(ASC(qGetDataIn$)) + ")"
 				REM GOSUB ZDEBUGMSG
 				REM Conversion from QWERTY to AZERTY (FR) in case of Keyboard usage
-				REM Inversion majuscule/minuscule pour les lettres non-remappees
-				REM Le clavier envoie MAJ sans Shift et min avec Shift
-				IF qGetDataIn$ = "B" THEN
-					qGetDataIn$ = "b"
-				ELSEIF qGetDataIn$ = "b" THEN
-					qGetDataIn$ = "B"
-				ELSEIF qGetDataIn$ = "C" THEN
-					qGetDataIn$ = "c"
-				ELSEIF qGetDataIn$ = "c" THEN
-					qGetDataIn$ = "C"
-				ELSEIF qGetDataIn$ = "D" THEN
-					qGetDataIn$ = "d"
-				ELSEIF qGetDataIn$ = "d" THEN
-					qGetDataIn$ = "D"
-				ELSEIF qGetDataIn$ = "E" THEN
-					qGetDataIn$ = "e"
-				ELSEIF qGetDataIn$ = "e" THEN
-					qGetDataIn$ = "E"
-				ELSEIF qGetDataIn$ = "F" THEN
-					qGetDataIn$ = "f"
-				ELSEIF qGetDataIn$ = "f" THEN
-					qGetDataIn$ = "F"
-				ELSEIF qGetDataIn$ = "G" THEN
-					qGetDataIn$ = "g"
-				ELSEIF qGetDataIn$ = "g" THEN
-					qGetDataIn$ = "G"
-				ELSEIF qGetDataIn$ = "H" THEN
-					qGetDataIn$ = "h"
-				ELSEIF qGetDataIn$ = "h" THEN
-					qGetDataIn$ = "H"
-				ELSEIF qGetDataIn$ = "I" THEN
-					qGetDataIn$ = "i"
-				ELSEIF qGetDataIn$ = "i" THEN
-					qGetDataIn$ = "I"
-				ELSEIF qGetDataIn$ = "J" THEN
-					qGetDataIn$ = "j"
-				ELSEIF qGetDataIn$ = "j" THEN
-					qGetDataIn$ = "J"
-				ELSEIF qGetDataIn$ = "K" THEN
-					qGetDataIn$ = "k"
-				ELSEIF qGetDataIn$ = "k" THEN
-					qGetDataIn$ = "K"
-				ELSEIF qGetDataIn$ = "L" THEN
-					qGetDataIn$ = "l"
-				ELSEIF qGetDataIn$ = "l" THEN
-					qGetDataIn$ = "L"
-				ELSEIF qGetDataIn$ = "N" THEN
-					qGetDataIn$ = "n"
-				ELSEIF qGetDataIn$ = "n" THEN
-					qGetDataIn$ = "N"
-				ELSEIF qGetDataIn$ = "O" THEN
-					qGetDataIn$ = "o"
-				ELSEIF qGetDataIn$ = "o" THEN
-					qGetDataIn$ = "O"
-				ELSEIF qGetDataIn$ = "P" THEN
-					qGetDataIn$ = "p"
-				ELSEIF qGetDataIn$ = "p" THEN
-					qGetDataIn$ = "P"
-				ELSEIF qGetDataIn$ = "R" THEN
-					qGetDataIn$ = "r"
-				ELSEIF qGetDataIn$ = "r" THEN
-					qGetDataIn$ = "R"
-				ELSEIF qGetDataIn$ = "S" THEN
-					qGetDataIn$ = "s"
-				ELSEIF qGetDataIn$ = "s" THEN
-					qGetDataIn$ = "S"
-				ELSEIF qGetDataIn$ = "T" THEN
-					qGetDataIn$ = "t"
-				ELSEIF qGetDataIn$ = "t" THEN
-					qGetDataIn$ = "T"
-				ELSEIF qGetDataIn$ = "U" THEN
-					qGetDataIn$ = "u"
-				ELSEIF qGetDataIn$ = "u" THEN
-					qGetDataIn$ = "U"
-				ELSEIF qGetDataIn$ = "V" THEN
-					qGetDataIn$ = "v"
-				ELSEIF qGetDataIn$ = "v" THEN
-					qGetDataIn$ = "V"
-				ELSEIF qGetDataIn$ = "X" THEN
-					qGetDataIn$ = "x"
-				ELSEIF qGetDataIn$ = "x" THEN
-					qGetDataIn$ = "X"
-				ELSEIF qGetDataIn$ = "Y" THEN
-					qGetDataIn$ = "y"
-				ELSEIF qGetDataIn$ = "y" THEN
-					qGetDataIn$ = "Y"
-				ENDIF
 				IF qGetDataIn$ = "Q" THEN 
-					qGetDataIn$ = "a"
-				ELSEIF qGetDataIn$ = "q" THEN 
 					qGetDataIn$ = "A"
 				ELSEIF qGetDataIn$ = "A" THEN 
-					qGetDataIn$ = "q"
-				ELSEIF qGetDataIn$ = "a" THEN 
 					qGetDataIn$ = "Q"
 				ENDIF
+				IF qGetDataIn$ = "q" THEN 
+					qGetDataIn$ = "a"
+				ELSEIF qGetDataIn$ = "a" THEN 
+					qGetDataIn$ = "q"
+				ENDIF
 				IF qGetDataIn$ = "W" THEN 
-					qGetDataIn$ = "z"
-				ELSEIF qGetDataIn$ = "w" THEN 
 					qGetDataIn$ = "Z"
 				ELSEIF qGetDataIn$ = "Z" THEN 
-					qGetDataIn$ = "w"
-				ELSEIF qGetDataIn$ = "z" THEN 
 					qGetDataIn$ = "W"
 				ENDIF
-				REM Conversion caracteres speciaux QWERTY vers AZERTY
-				REM Un seul bloc IF/ELSEIF pour eviter les conversions en cascade
-				REM AZERTY m = QWERTY ; | AZERTY , = QWERTY m
-				REM AZERTY M = QWERTY : | AZERTY ? = QWERTY M
+				IF qGetDataIn$ = "w" THEN 
+					qGetDataIn$ = "z"
+				ELSEIF qGetDataIn$ = "z" THEN 
+					qGetDataIn$ = "w"
+				ENDIF
 				IF qGetDataIn$ = ";" THEN
 					qGetDataIn$ = "m"
-				ELSEIF qGetDataIn$ = ":" THEN
-					qGetDataIn$ = "M"
 				ELSEIF qGetDataIn$ = "m" THEN
-					qGetDataIn$ = ","
+					qGetDataIn$ = ";"
+				ENDIF
+				IF qGetDataIn$ = ":" THEN
+					qGetDataIn$ = "M"
 				ELSEIF qGetDataIn$ = "M" THEN
-					qGetDataIn$ = "?"
+					qGetDataIn$ = ":"
+				ENDIF
+				IF qGetDataIn$ = ";" THEN
+					qGetDataIn$ = ","
 				ELSEIF qGetDataIn$ = "," THEN
 					qGetDataIn$ = ";"
-				ELSEIF qGetDataIn$ = "<" THEN
+				ENDIF
+				IF qGetDataIn$ = "<" THEN
 					qGetDataIn$ = "."
 				ELSEIF qGetDataIn$ = ">" THEN
 					qGetDataIn$ = "/"
-				ELSEIF qGetDataIn$ = "/" THEN
+				ENDIF
+				IF qGetDataIn$ = "/" THEN
 					qGetDataIn$ = "!"
 				ELSEIF qGetDataIn$ = "?" THEN
 					qGetDataIn$ = "§"
-				ENDIF
-				REM Support du caractere Euro via la touche $ (AZERTY)
-				REM La touche $ en AZERTY correspond a ] (code 93) en QWERTY
-				IF qGetDataIn$ = "]" THEN
-					qGetDataIn$ = "€"
 				ENDIF
 				qData$ = qData$ + qGetDataIn$
 				qDataEnd = 0
